@@ -1,0 +1,41 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+
+# Rider / ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# NuGet
+packages/
+*.nupkg
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Node (falls später Frontend-Erweiterungen kommen)
+node_modules/
+
+# Publish output
+publish/
+
+# Temporary files
+tmp/
+temp/
+
+# Blazor / WebAssembly
+wwwroot/dist/
+
+# Environment / local settings
+appsettings.Development.json
