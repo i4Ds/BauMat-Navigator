@@ -1,0 +1,10 @@
+﻿@page "/katalog/{kategorie}"
+
+<PageTitle>Katalog – @Kategorie</PageTitle>
+
+<h1>Katalog: @Kategorie</h1>
+<p>Listenansicht folgt. Issue #3.</p>
+
+@code {
+    [Parameter] public string Kategorie { get; set; } = "";
+}

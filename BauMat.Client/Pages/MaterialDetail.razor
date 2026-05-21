@@ -1,0 +1,10 @@
+﻿@page "/material/{id:int}"
+
+<PageTitle>Material @Id</PageTitle>
+
+<h1>Material #@Id</h1>
+<p>Detailansicht folgt. Issue #3.</p>
+
+@code {
+    [Parameter] public int Id { get; set; }
+}
