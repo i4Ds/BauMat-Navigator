@@ -1,0 +1,91 @@
+﻿.ml-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* ── Header ──────────────────────────────────────────── */
+
+.ml-header {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+}
+
+.ml-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.ml-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0.25rem 0 0 0;
+}
+
+/* ── Table ───────────────────────────────────────────── */
+
+.ml-table-wrap {
+    border: 1px solid #e5e7eb;
+    overflow-x: auto;
+}
+
+.ml-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+    .ml-table thead th {
+        background: #f9fafb;
+        text-align: left;
+        padding: 0.5rem 0.875rem;
+        font-weight: 600;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+.ml-units th {
+    font-weight: 400;
+    color: #9ca3af;
+    text-transform: none;
+    letter-spacing: 0;
+    padding-top: 0.125rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ml-table tbody td {
+    padding: 0.625rem 0.875rem;
+    border-bottom: 1px solid #f3f4f6;
+    color: #1f2937;
+    vertical-align: middle;
+}
+
+.ml-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.ml-table tbody tr:hover td {
+    background: #fafafa;
+}
+
+.ml-cell-name {
+    font-weight: 500;
+    color: #111827;
+}
+
+.ml-cell-typ {
+    color: #6b7280;
+}
+
+.ml-cell-num,
+.ml-col-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}

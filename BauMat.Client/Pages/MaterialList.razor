@@ -2,8 +2,50 @@
 
 <PageTitle>Katalog – @Kategorie</PageTitle>
 
-<h1>Katalog: @Kategorie</h1>
-<p>@Materialien.Count Materialien geladen. Tabelle folgt im nächsten Commit.</p>
+<div class="ml-page">
+
+    <header class="ml-header">
+        <h1 class="ml-title">Katalog: @Kategorie</h1>
+        <p class="ml-subtitle">@Materialien.Count Materialien</p>
+    </header>
+
+    <div class="ml-table-wrap">
+        <table class="ml-table">
+            <thead>
+                <tr>
+                    <th class="ml-col-name">Material</th>
+                    <th class="ml-col-typ">Konstruktionstyp</th>
+                    <th class="ml-col-num">PET Tag</th>
+                    <th class="ml-col-num">Albedo</th>
+                    <th class="ml-col-num">Lebensdauer</th>
+                    <th class="ml-col-num">THG</th>
+                </tr>
+                <tr class="ml-units">
+                    <th></th>
+                    <th></th>
+                    <th>°C</th>
+                    <th>-</th>
+                    <th>Jahre</th>
+                    <th>kg CO₂-eq/m²</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in Materialien)
+                {
+                    <tr>
+                        <td class="ml-cell-name">@m.Name</td>
+                        <td class="ml-cell-typ">@m.Konstruktionstyp</td>
+                        <td class="ml-cell-num">@m.PetTag.ToString("0.0")</td>
+                        <td class="ml-cell-num">@m.Albedo.ToString("0.00")</td>
+                        <td class="ml-cell-num">@m.Lebensdauer</td>
+                        <td class="ml-cell-num">@m.Thg.ToString("0")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
 
 @code {
     [Parameter] public string Kategorie { get; set; } = "";
