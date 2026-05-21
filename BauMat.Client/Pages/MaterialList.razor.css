@@ -89,3 +89,47 @@
     text-align: right;
     font-variant-numeric: tabular-nums;
 }
+
+/* ── Filter ──────────────────────────────────────────── */
+
+.ml-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.ml-filter-label {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    margin-right: 0.25rem;
+}
+
+.ml-chip {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+    .ml-chip:hover {
+        border-color: #6b7280;
+    }
+
+.ml-chip-active {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+}
+
+/* ── Leere Filter-Ergebnisse ─────────────────────────── */
+
+.ml-empty {
+    text-align: center;
+    color: #9ca3af;
+    padding: 1.5rem 1rem;
+    font-style: italic;
+}

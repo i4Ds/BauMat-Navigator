@@ -6,9 +6,23 @@
 
     <header class="ml-header">
         <h1 class="ml-title">Katalog: @Kategorie</h1>
-        <p class="ml-subtitle">@Materialien.Count Materialien</p>
+        <p class="ml-subtitle">@FilterStatus</p>
     </header>
 
+    @* ── Filter ──────────────────────────────────────────── *@
+    <div class="ml-filter-row">
+        <span class="ml-filter-label">Konstruktionstyp:</span>
+        @foreach (var typ in Konstruktionstypen)
+        {
+            <button type="button"
+                    class="ml-chip @(typ == aktiverTyp ? "ml-chip-active" : "")"
+                    @onclick="() => SetzeFilter(typ)">
+                @typ
+            </button>
+        }
+    </div>
+
+    @* ── Tabelle ─────────────────────────────────────────── *@
     <div class="ml-table-wrap">
         <table class="ml-table">
             <thead>
@@ -30,7 +44,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var m in Materialien)
+                @foreach (var m in GefilterteMaterialien)
                 {
                     <tr>
                         <td class="ml-cell-name">@m.Name</td>
@@ -39,6 +53,14 @@
                         <td class="ml-cell-num">@m.Albedo.ToString("0.00")</td>
                         <td class="ml-cell-num">@m.Lebensdauer</td>
                         <td class="ml-cell-num">@m.Thg.ToString("0")</td>
+                    </tr>
+                }
+                @if (!GefilterteMaterialien.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="ml-empty">
+                            Keine Materialien für Filter „@aktiverTyp".
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -50,6 +72,9 @@
 @code {
     [Parameter] public string Kategorie { get; set; } = "";
 
+    private const string Alle = "Alle";
+    private string aktiverTyp = Alle;
+
     // ── Mock-Daten ────────────────────────────────────────────────────────
     //
     // Inline-Daten für den Prototyp. Echte Daten aus dem PDF-Katalog
@@ -59,10 +84,10 @@
         int Id,
         string Name,
         string Konstruktionstyp,
-        double PetTag,        // °C, tiefer = besser
-        double Albedo,        // 0..1, höher = mehr Reflexion
-        int Lebensdauer,      // Jahre
-        double Thg);          // kg CO2-eq/m², tiefer = besser
+        double PetTag,
+        double Albedo,
+        int Lebensdauer,
+        double Thg);
 
     private readonly List<Material> Materialien = new()
     {
@@ -72,4 +97,31 @@
         new(4, "Steinplattenpflästerung", "Versiegelt",     35.0, 0.20, 60, 65),
         new(5, "Betonpflaster, hell",     "Teilversiegelt", 33.5, 0.45, 40, 38),
     };
+
+    // ── Abgeleitete Werte ─────────────────────────────────────────────────
+
+    private IEnumerable<string> Konstruktionstypen =>
+        new[] { Alle }
+            .Concat(Materialien.Select(m => m.Konstruktionstyp).Distinct().OrderBy(s => s));
+
+    private IEnumerable<Material> GefilterteMaterialien =>
+        aktiverTyp == Alle
+            ? Materialien
+            : Materialien.Where(m => m.Konstruktionstyp == aktiverTyp);
+
+    private string FilterStatus
+    {
+        get
+        {
+            var total = Materialien.Count;
+            var gezeigt = GefilterteMaterialien.Count();
+            return aktiverTyp == Alle
+                ? $"{total} Materialien"
+                : $"{gezeigt} von {total} Materialien";
+        }
+    }
+
+    // ── Event-Handler ─────────────────────────────────────────────────────
+
+    private void SetzeFilter(string typ) => aktiverTyp = typ;
 }
