@@ -62,11 +62,18 @@ public partial class MaterialList
     private void SetzeFilter(string typ) => aktiverTyp = typ;
 
 
+    // ── Panel-Sichtbarkeit ────────────────────────────────────────────────
+
+    private bool filterOffen = false;
+    private bool gewichtungOffen = true;
+
+    private void ToggleFilter() => filterOffen = !filterOffen;
+    private void ToggleGewichtung() => gewichtungOffen = !gewichtungOffen;
+
     // ── Gewichtung ────────────────────────────────────────────────────────
     //
     // TODO: Die Gewichte werden noch nicht auf die Tabellen-Sortierung
-    // angewendet. Issue #3 verlangt zunächst nur die UI; die eigentliche
-    // gewichtete Sortierung folgt in einem späteren Schritt.
+    // angewendet.die eigentliche gewichtete Sortierung folgt in einem späteren Schritt (MCDM).
 
     private static readonly string[] Gewichtsparameter =
         { "PET Tag", "Albedo", "Lebensdauer", "THG" };

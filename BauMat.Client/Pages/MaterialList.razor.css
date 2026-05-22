@@ -25,6 +25,168 @@
     margin: 0.25rem 0 0 0;
 }
 
+/* ── Two-column layout: sidebar + table ──────────────── */
+
+.ml-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+@media (max-width: 720px) {
+    .ml-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Sidebar ─────────────────────────────────────────── */
+
+.ml-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* ── Collapsible panel ───────────────────────────────── */
+
+.ml-panel {
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.ml-panel-head {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    padding: 0.625rem 0.875rem;
+    display: grid;
+    grid-template-columns: 1rem 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+}
+
+.ml-panel-open .ml-panel-head {
+    border-bottom-color: #e5e7eb;
+    background: #f9fafb;
+}
+
+.ml-panel-head:hover {
+    background: #f9fafb;
+}
+
+.ml-panel-caret {
+    color: #6b7280;
+    font-size: 0.75rem;
+}
+
+.ml-panel-title {
+    font-weight: 600;
+    color: #111827;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ml-panel-meta {
+    color: #6b7280;
+    font-size: 0.75rem;
+}
+
+.ml-panel-body {
+    padding: 0.75rem 0.875rem 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ml-panel-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ml-panel-hint {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0 0 0.25rem 0;
+    font-style: italic;
+}
+
+/* ── Filter chips (vertical stack in sidebar) ────────── */
+
+.ml-chip-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ml-chip {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+}
+
+    .ml-chip:hover {
+        border-color: #6b7280;
+    }
+
+.ml-chip-active {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+}
+
+/* ── Weight sliders ──────────────────────────────────── */
+
+.ml-weight-row {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr 1.25rem;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: #374151;
+}
+
+.ml-slider {
+    width: 100%;
+    accent-color: #111827;
+}
+
+.ml-weight-value {
+    font-variant-numeric: tabular-nums;
+    color: #111827;
+    text-align: right;
+    font-weight: 500;
+}
+
+.ml-reset {
+    align-self: flex-start;
+    background: transparent;
+    border: 0;
+    color: #6b7280;
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    padding: 0.25rem 0 0 0;
+}
+
+    .ml-reset:hover {
+        color: #111827;
+    }
+
 /* ── Table ───────────────────────────────────────────── */
 
 .ml-table-wrap {
@@ -60,6 +222,13 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
+/* headers AND values right-aligned */
+.ml-table thead th.ml-col-num,
+.ml-table td.ml-cell-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
 .ml-table tbody td {
     padding: 0.625rem 0.875rem;
     border-bottom: 1px solid #f3f4f6;
@@ -84,128 +253,11 @@
     color: #6b7280;
 }
 
-/* Header UND Werte rechtsbündig für bessere Lesbarkeit. */
-.ml-table thead th.ml-col-num,
-.ml-table td.ml-cell-num {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-}
-
-/* ── Filter ──────────────────────────────────────────── */
-
-.ml-filter-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.ml-filter-label {
-    font-size: 0.8125rem;
-    color: #6b7280;
-    margin-right: 0.25rem;
-}
-
-.ml-chip {
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    color: #374151;
-    padding: 0.3rem 0.75rem;
-    font-size: 0.8125rem;
-    cursor: pointer;
-    font-family: inherit;
-}
-
-    .ml-chip:hover {
-        border-color: #6b7280;
-    }
-
-.ml-chip-active {
-    background: #111827;
-    border-color: #111827;
-    color: #ffffff;
-}
-
-/* ── Leere Filter-Ergebnisse ─────────────────────────── */
+/* ── Empty filter result ─────────────────────────────── */
 
 .ml-empty {
     text-align: center;
     color: #9ca3af;
     padding: 1.5rem 1rem;
     font-style: italic;
-}
-
-/* ── Weights panel ───────────────────────────────────── */
-
-.ml-weights {
-    border: 1px solid #f3f4f6;
-    background: #fafafa;
-    padding: 0.875rem 1rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.ml-weights-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.ml-weights-title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #111827;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.ml-reset {
-    background: transparent;
-    border: 0;
-    color: #6b7280;
-    font-size: 0.75rem;
-    cursor: pointer;
-    text-decoration: underline;
-    font-family: inherit;
-    padding: 0;
-}
-
-    .ml-reset:hover {
-        color: #111827;
-    }
-
-.ml-weights-hint {
-    font-size: 0.75rem;
-    color: #6b7280;
-    margin: 0 0 0.25rem 0;
-    font-style: italic;
-}
-
-.ml-weights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: 0.5rem 1.5rem;
-}
-
-.ml-weight-row {
-    display: grid;
-    grid-template-columns: 6rem 1fr 1.5rem;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    color: #374151;
-}
-
-.ml-slider {
-    width: 100%;
-    accent-color: #111827;
-}
-
-.ml-weight-value {
-    font-variant-numeric: tabular-nums;
-    color: #111827;
-    text-align: right;
-    font-weight: 500;
 }
