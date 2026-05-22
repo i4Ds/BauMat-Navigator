@@ -84,8 +84,9 @@
     color: #6b7280;
 }
 
-.ml-cell-num,
-.ml-col-num {
+/* Header UND Werte rechtsbündig für bessere Lesbarkeit. */
+.ml-table thead th.ml-col-num,
+.ml-table td.ml-cell-num {
     text-align: right;
     font-variant-numeric: tabular-nums;
 }
