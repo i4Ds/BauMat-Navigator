@@ -9,6 +9,37 @@
         <p class="ml-subtitle">@FilterStatus</p>
     </header>
 
+    @* ── Gewichtung (UI only — Logik folgt, siehe TODO im Code-Behind) ── *@
+    <div class="ml-weights">
+        <div class="ml-weights-head">
+            <h2 class="ml-weights-title">Gewichtung</h2>
+            <button type="button" class="ml-reset" @onclick="GewichteZuruecksetzen">
+                Zurücksetzen
+            </button>
+        </div>
+        <p class="ml-weights-hint">
+            Welche Parameter sind dir wichtig? (Demo — die Tabelle reagiert noch nicht.)
+        </p>
+        <div class="ml-weights-grid">
+            @foreach (var p in Gewichtsparameter)
+            {
+                var aktuell = gewichte.TryGetValue(p, out var w) ? w : 0;
+                <div class="ml-weight-row">
+                    <label class="ml-weight-label" for="@($"w-{p}")">@p</label>
+                    <input id="@($"w-{p}")"
+                           type="range"
+                           min="0"
+                           max="5"
+                           step="1"
+                           class="ml-slider"
+                           value="@aktuell"
+                           @oninput="(e) => SetzeGewicht(p, e.Value)" />
+                    <span class="ml-weight-value">@aktuell</span>
+                </div>
+            }
+        </div>
+    </div>
+
     @* ── Filter ──────────────────────────────────────────── *@
     <div class="ml-filter-row">
         <span class="ml-filter-label">Konstruktionstyp:</span>

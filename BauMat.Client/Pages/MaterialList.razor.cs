@@ -60,4 +60,34 @@ public partial class MaterialList
     }
 
     private void SetzeFilter(string typ) => aktiverTyp = typ;
+
+
+    // ── Gewichtung ────────────────────────────────────────────────────────
+    //
+    // TODO: Die Gewichte werden noch nicht auf die Tabellen-Sortierung
+    // angewendet. Issue #3 verlangt zunächst nur die UI; die eigentliche
+    // gewichtete Sortierung folgt in einem späteren Schritt.
+
+    private static readonly string[] Gewichtsparameter =
+        { "PET Tag", "Albedo", "Lebensdauer", "THG" };
+
+    private readonly Dictionary<string, int> gewichte = new();
+
+    protected override void OnInitialized()
+    {
+        foreach (var p in Gewichtsparameter) gewichte[p] = 0;
+    }
+
+    private void SetzeGewicht(string parameter, object? value)
+    {
+        if (int.TryParse(value?.ToString(), out var g))
+        {
+            gewichte[parameter] = Math.Clamp(g, 0, 5);
+        }
+    }
+
+    private void GewichteZuruecksetzen()
+    {
+        foreach (var p in Gewichtsparameter) gewichte[p] = 0;
+    }
 }

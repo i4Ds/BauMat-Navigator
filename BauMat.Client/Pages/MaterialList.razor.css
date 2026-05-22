@@ -133,3 +133,78 @@
     padding: 1.5rem 1rem;
     font-style: italic;
 }
+
+/* ── Weights panel ───────────────────────────────────── */
+
+.ml-weights {
+    border: 1px solid #f3f4f6;
+    background: #fafafa;
+    padding: 0.875rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ml-weights-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ml-weights-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ml-reset {
+    background: transparent;
+    border: 0;
+    color: #6b7280;
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    padding: 0;
+}
+
+    .ml-reset:hover {
+        color: #111827;
+    }
+
+.ml-weights-hint {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0 0 0.25rem 0;
+    font-style: italic;
+}
+
+.ml-weights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 0.5rem 1.5rem;
+}
+
+.ml-weight-row {
+    display: grid;
+    grid-template-columns: 6rem 1fr 1.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: #374151;
+}
+
+.ml-slider {
+    width: 100%;
+    accent-color: #111827;
+}
+
+.ml-weight-value {
+    font-variant-numeric: tabular-nums;
+    color: #111827;
+    text-align: right;
+    font-weight: 500;
+}
