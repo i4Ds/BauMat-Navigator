@@ -17,14 +17,21 @@
 
 .hero-image-placeholder {
     flex: 1;
-    margin: 2.5rem;
-    border-top: 4px dashed #d1d5db;
+    margin: 2rem;
     display: flex;
     align-items: center;
-    padding-left: 1.5rem;
-    color: #c4c9d0;
-    font-size: clamp(2.25rem, 5vw, 4rem);
-    font-weight: 500;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.hero-image-placeholder img {
+    max-width: 100%;
+    max-height: 280px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .home-section-nav {
