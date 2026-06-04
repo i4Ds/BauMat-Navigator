@@ -261,3 +261,14 @@
     padding: 1.5rem 1rem;
     font-style: italic;
 }
+
+/* ── Clickable rows ──────────────────────────────────── */
+
+.ml-row-link {
+    cursor: pointer;
+}
+
+    .ml-row-link:focus {
+        outline: 2px solid #111827;
+        outline-offset: -2px;
+    }

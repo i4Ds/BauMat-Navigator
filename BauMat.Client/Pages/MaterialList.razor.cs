@@ -97,4 +97,11 @@ public partial class MaterialList
     {
         foreach (var p in Gewichtsparameter) gewichte[p] = 0;
     }
+
+    // ── Navigation zur Detail-Seite ───────────────────────────────────────
+
+    [Inject] private NavigationManager Nav { get; set; } = default!;
+
+    private void OeffneDetail(int id) => Nav.NavigateTo($"/material/{id}");
+
 }

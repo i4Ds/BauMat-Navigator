@@ -103,7 +103,10 @@
                 <tbody>
                     @foreach (var m in GefilterteMaterialien)
                     {
-                        <tr>
+                        <tr class="ml-row-link"
+                            tabindex="0"
+                            @onclick="() => OeffneDetail(m.Id)"
+                            @onkeydown="@(e => { if (e.Key == "Enter" || e.Key == " ") OeffneDetail(m.Id); })">
                             <td class="ml-cell-name">@m.Name</td>
                             <td class="ml-cell-typ">@m.Konstruktionstyp</td>
                             <td class="ml-cell-num">@m.PetTag.ToString("0.0")</td>
