@@ -1,0 +1,131 @@
+﻿body {
+}
+.md-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 48rem;
+}
+
+/* ── Back link ───────────────────────────────────────── */
+
+.md-back {
+    align-self: flex-start;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+    .md-back:hover {
+        color: #111827;
+        text-decoration: underline;
+    }
+
+/* ── Not found ───────────────────────────────────────── */
+
+.md-notfound {
+    color: #6b7280;
+    padding: 2rem 0;
+}
+
+    .md-notfound h1 {
+        color: #111827;
+        margin: 0 0 0.5rem 0;
+    }
+
+/* ── Header ──────────────────────────────────────────── */
+
+.md-header {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+}
+
+.md-eyebrow {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0 0 0.25rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.md-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+/* ── Description ─────────────────────────────────────── */
+
+.md-description {
+    color: #374151;
+    line-height: 1.5;
+}
+
+    .md-description p {
+        margin: 0;
+    }
+
+/* ── Section title ───────────────────────────────────── */
+
+.md-section-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Parameter table ─────────────────────────────────── */
+
+.md-table-wrap {
+    border: 1px solid #e5e7eb;
+}
+
+.md-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+    .md-table thead th {
+        background: #f9fafb;
+        text-align: left;
+        padding: 0.5rem 0.875rem;
+        font-weight: 600;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .md-table tbody td {
+        padding: 0.625rem 0.875rem;
+        border-bottom: 1px solid #f3f4f6;
+        color: #1f2937;
+        vertical-align: middle;
+    }
+
+    .md-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+.md-cell-param {
+    font-weight: 500;
+    color: #111827;
+}
+
+.md-cell-wert {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.md-cell-einheit {
+    color: #6b7280;
+}
+
+.md-table th.md-col-wert {
+    text-align: right;
+}

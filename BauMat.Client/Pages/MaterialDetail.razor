@@ -1,10 +1,53 @@
 ﻿@page "/material/{id:int}"
 
-<PageTitle>Material @Id</PageTitle>
+<PageTitle>@(Gefunden?.Name ?? $"Material {Id}")</PageTitle>
 
-<h1>Material #@Id</h1>
-<p>Detailansicht folgt. Issue #3.</p>
+<div class="md-page">
 
-@code {
-    [Parameter] public int Id { get; set; }
-}
+    <a class="md-back" href="/katalog/boden">← Zurück zur Liste</a>
+
+    @if (Gefunden is null)
+    {
+        <div class="md-notfound">
+            <h1>Material nicht gefunden</h1>
+            <p>Es gibt kein Material mit der Id <strong>@Id</strong>.</p>
+        </div>
+    }
+    else
+    {
+        <header class="md-header">
+            <p class="md-eyebrow">@Gefunden.Konstruktionstyp</p>
+            <h1 class="md-title">@Gefunden.Name</h1>
+        </header>
+
+        <section class="md-description">
+            <p>@Gefunden.Beschreibung</p>
+        </section>
+
+        <section>
+            <h2 class="md-section-title">Parameter</h2>
+            <div class="md-table-wrap">
+                <table class="md-table">
+                    <thead>
+                        <tr>
+                            <th class="md-col-param">Parameter</th>
+                            <th class="md-col-wert">Wert</th>
+                            <th class="md-col-einheit">Einheit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in ParameterTabelle())
+                        {
+                            <tr>
+                                <td class="md-cell-param">@p.Name</td>
+                                <td class="md-cell-wert">@p.Wert</td>
+                                <td class="md-cell-einheit">@p.Einheit</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+
+</div>
