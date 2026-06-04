@@ -9,62 +9,120 @@
         <p class="ml-subtitle">@FilterStatus</p>
     </header>
 
-    @* ── Filter ──────────────────────────────────────────── *@
-    <div class="ml-filter-row">
-        <span class="ml-filter-label">Konstruktionstyp:</span>
-        @foreach (var typ in Konstruktionstypen)
-        {
-            <button type="button"
-                    class="ml-chip @(typ == aktiverTyp ? "ml-chip-active" : "")"
-                    @onclick="() => SetzeFilter(typ)">
-                @typ
-            </button>
-        }
-    </div>
+    <div class="ml-layout">
 
-    @* ── Tabelle ─────────────────────────────────────────── *@
-    <div class="ml-table-wrap">
-        <table class="ml-table">
-            <thead>
-                <tr>
-                    <th class="ml-col-name">Material</th>
-                    <th class="ml-col-typ">Konstruktionstyp</th>
-                    <th class="ml-col-num">PET Tag</th>
-                    <th class="ml-col-num">Albedo</th>
-                    <th class="ml-col-num">Lebensdauer</th>
-                    <th class="ml-col-num">THG</th>
-                </tr>
-                <tr class="ml-units">
-                    <th></th>
-                    <th></th>
-                    <th>°C</th>
-                    <th>-</th>
-                    <th>Jahre</th>
-                    <th>kg CO₂-eq/m²</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var m in GefilterteMaterialien)
-                {
-                    <tr>
-                        <td class="ml-cell-name">@m.Name</td>
-                        <td class="ml-cell-typ">@m.Konstruktionstyp</td>
-                        <td class="ml-cell-num">@m.PetTag.ToString("0.0")</td>
-                        <td class="ml-cell-num">@m.Albedo.ToString("0.00")</td>
-                        <td class="ml-cell-num">@m.Lebensdauer</td>
-                        <td class="ml-cell-num">@m.Thg.ToString("0")</td>
-                    </tr>
-                }
-                @if (!GefilterteMaterialien.Any())
-                {
-                    <tr>
-                        <td colspan="6" class="ml-empty">
-                            Keine Materialien für Filter „@aktiverTyp".
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+        @* ── Sidebar ─────────────────────────────────────── *@
+        <aside class="ml-sidebar">
 
+            @* ── Filter-Panel (default zu) ─────────────────── *@
+            <section class="ml-panel @(filterOffen ? "ml-panel-open" : "")">
+                <button type="button" class="ml-panel-head" @onclick="ToggleFilter">
+                    <span class="ml-panel-caret">@(filterOffen ? "▾" : "▸")</span>
+                    <span class="ml-panel-title">Filter</span>
+                    <span class="ml-panel-meta">@aktiverTyp</span>
+                </button>
+                @if (filterOffen)
+                {
+                    <div class="ml-panel-body">
+                        <p class="ml-panel-label">Konstruktionstyp</p>
+                        <div class="ml-chip-stack">
+                            @foreach (var typ in Konstruktionstypen)
+                            {
+                                <button type="button"
+                                        class="ml-chip @(typ == aktiverTyp ? "ml-chip-active" : "")"
+                                        @onclick="() => SetzeFilter(typ)">
+                                    @typ
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            </section>
+
+            @* ── Gewichtungs-Panel (default offen) ────────── *@
+            <section class="ml-panel @(gewichtungOffen ? "ml-panel-open" : "")">
+                <button type="button" class="ml-panel-head" @onclick="ToggleGewichtung">
+                    <span class="ml-panel-caret">@(gewichtungOffen ? "▾" : "▸")</span>
+                    <span class="ml-panel-title">Gewichtung</span>
+                </button>
+                @if (gewichtungOffen)
+                {
+                    <div class="ml-panel-body">
+                        <p class="ml-panel-hint">
+                            Welche Parameter sind dir wichtig?
+                            (Demo — die Tabelle reagiert noch nicht.)
+                        </p>
+                        @foreach (var p in Gewichtsparameter)
+                        {
+                            var aktuell = gewichte.TryGetValue(p, out var w) ? w : 0;
+                            <div class="ml-weight-row">
+                                <label class="ml-weight-label" for="@($"w-{p}")">@p</label>
+                                <input id="@($"w-{p}")"
+                                       type="range"
+                                       min="0"
+                                       max="5"
+                                       step="1"
+                                       class="ml-slider"
+                                       value="@aktuell"
+                                       @oninput="(e) => SetzeGewicht(p, e.Value)" />
+                                <span class="ml-weight-value">@aktuell</span>
+                            </div>
+                        }
+                        <button type="button"
+                                class="ml-reset"
+                                @onclick="GewichteZuruecksetzen">
+                            Zurücksetzen
+                        </button>
+                    </div>
+                }
+            </section>
+
+        </aside>
+
+        @* ── Tabelle ─────────────────────────────────────── *@
+        <div class="ml-table-wrap">
+            <table class="ml-table">
+                <thead>
+                    <tr>
+                        <th class="ml-col-name">Material</th>
+                        <th class="ml-col-typ">Konstruktionstyp</th>
+                        <th class="ml-col-num">PET Tag</th>
+                        <th class="ml-col-num">Albedo</th>
+                        <th class="ml-col-num">Lebensdauer</th>
+                        <th class="ml-col-num">THG</th>
+                    </tr>
+                    <tr class="ml-units">
+                        <th></th>
+                        <th></th>
+                        <th class="ml-col-num">°C</th>
+                        <th class="ml-col-num">-</th>
+                        <th class="ml-col-num">Jahre</th>
+                        <th class="ml-col-num">kg CO₂-eq/m²</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var m in GefilterteMaterialien)
+                    {
+                        <tr>
+                            <td class="ml-cell-name">@m.Name</td>
+                            <td class="ml-cell-typ">@m.Konstruktionstyp</td>
+                            <td class="ml-cell-num">@m.PetTag.ToString("0.0")</td>
+                            <td class="ml-cell-num">@m.Albedo.ToString("0.00")</td>
+                            <td class="ml-cell-num">@m.Lebensdauer</td>
+                            <td class="ml-cell-num">@m.Thg.ToString("0")</td>
+                        </tr>
+                    }
+                    @if (!GefilterteMaterialien.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="ml-empty">
+                                Keine Materialien für Filter „@aktiverTyp".
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 </div>
