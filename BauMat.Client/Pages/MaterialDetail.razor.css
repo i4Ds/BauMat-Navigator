@@ -129,3 +129,18 @@
 .md-table th.md-col-wert {
     text-align: right;
 }
+
+
+/* ── Info section (Anwendung / Eigenschaften / Hinweise) ─ */
+
+.md-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.md-info-block p {
+    margin: 0.25rem 0 0 0;
+    color: #374151;
+    line-height: 1.5;
+}
