@@ -38,7 +38,16 @@
 .md-header {
     border-bottom: 1px solid #e5e7eb;
     padding-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
 }
+
+.md-header-text {
+    flex: 1;
+}
+
 
 .md-eyebrow {
     font-size: 0.75rem;
@@ -144,3 +153,21 @@
     color: #374151;
     line-height: 1.5;
 }
+
+/* ── Print button ────────────────────────────────────── */
+
+.md-print {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    padding: 0.4rem 0.875rem;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+    .md-print:hover {
+        border-color: #6b7280;
+        color: #111827;
+    }

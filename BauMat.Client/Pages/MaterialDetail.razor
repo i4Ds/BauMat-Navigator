@@ -16,8 +16,13 @@
     else
     {
         <header class="md-header">
-            <p class="md-eyebrow">@Gefunden.Konstruktionstyp</p>
-            <h1 class="md-title">@Gefunden.Name</h1>
+            <div class="md-header-text">
+                <p class="md-eyebrow">@Gefunden.Konstruktionstyp</p>
+                <h1 class="md-title">@Gefunden.Name</h1>
+            </div>
+            <button type="button" class="md-print" @onclick="Drucken">
+                Drucken
+            </button>
         </header>
 
         <section class="md-description">

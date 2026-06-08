@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace BauMat.Client.Pages;
 
@@ -9,6 +10,13 @@ namespace BauMat.Client.Pages;
 public partial class MaterialDetail
 {
     [Parameter] public int Id { get; set; }
+
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private async Task Drucken()
+    {
+        await JS.InvokeVoidAsync("window.print");
+    }
 
     // ── Mock-Daten ────────────────────────────────────────────────────────
     //
