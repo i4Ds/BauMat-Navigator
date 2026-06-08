@@ -1,0 +1,22 @@
+@inherits LayoutComponentBase
+
+<header class="app-header">
+    <div class="app-header-inner">
+        <a class="app-brand" href="/">
+            <div class="app-logo">
+                <div class="logo-placeholder"></div>
+            </div>
+            <div class="app-title-group">
+                <span class="app-title">Klimamaterial</span>
+                <span class="app-subtitle">Materialkatalog</span>
+            </div>
+        </a>
+        <NavMenu />
+    </div>
+</header>
+
+<main class="app-main">
+    <div class="app-container">
+        @Body
+    </div>
+</main>

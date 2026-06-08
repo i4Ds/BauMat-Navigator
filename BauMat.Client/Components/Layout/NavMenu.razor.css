@@ -1,0 +1,28 @@
+.app-nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.app-nav-link {
+    padding: 0.45rem 0.9rem;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: color 0.15s ease, background-color 0.15s ease;
+    white-space: nowrap;
+}
+
+.app-nav-link:hover {
+    color: #111827;
+    background-color: #f3f4f6;
+    text-decoration: none;
+}
+
+.app-nav-link.active {
+    color: #16a34a;
+    background-color: #f0fdf4;
+    font-weight: 600;
+}
