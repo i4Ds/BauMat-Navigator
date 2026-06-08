@@ -37,7 +37,7 @@
 .home-section-nav {
     display: flex;
     justify-content: center;
-    gap: clamp(2rem, 8vw, 5rem);
+    gap: clamp(3.5rem, 12vw, 8rem);
     padding: 2rem 1.5rem 0.75rem;
     background: #ffffff;
 }
