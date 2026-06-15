@@ -2,27 +2,25 @@
 
 namespace BauMat.Client.Pages;
 
-/// <summary>
 /// Katalog-Listenansicht einer Material-Kategorie (Issue #3).
 /// Markup liegt in MaterialList.razor, Styling in MaterialList.razor.css.
-/// </summary>
 public partial class MaterialList
 {
+    // Kategorie (/katalog/{kategorie}) 
     [Parameter] public string Kategorie { get; set; } = "";
 
     // ── Mock-Daten ────────────────────────────────────────────────────────
-    //
     // Inline-Daten für den Prototyp. Echte Daten aus dem PDF-Katalog
-    // werden in Issue #11 (JSON + Deserialisierung) angebunden.
+    // werden in Issue #11 (JSON + Deserialisierung) ausgebaut.
 
     private record Material(
         int Id,
         string Name,
         string Konstruktionstyp,
-        double PetTag,        // °C, tiefer = besser
-        double Albedo,        // 0..1, höher = mehr Reflexion
-        int Lebensdauer,      // Jahre
-        double Thg);          // kg CO2-eq/m², tiefer = besser
+        double PetTag,        
+        double Albedo,        
+        int Lebensdauer,     
+        double Thg);          
 
     private readonly List<Material> Materialien = new()
     {
@@ -73,7 +71,8 @@ public partial class MaterialList
     // ── Gewichtung ────────────────────────────────────────────────────────
     //
     // TODO: Die Gewichte werden noch nicht auf die Tabellen-Sortierung
-    // angewendet.die eigentliche gewichtete Sortierung folgt in einem späteren Schritt (MCDM).
+    // angewendet. Die eigentliche gewichtete Sortierung (MCDM – Multi-Criteria
+    // Decision Making) folgt in einem späteren Schritt.
 
     private static readonly string[] Gewichtsparameter =
         { "PET Tag", "Albedo", "Lebensdauer", "THG" };
