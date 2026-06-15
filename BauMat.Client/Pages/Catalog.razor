@@ -164,7 +164,7 @@
         return sb.ToString();
     }
 
-    private List<MaterialItem> Materials = new()
+    private readonly List<MaterialItem> Materials = new()
     {
         new() { Id = 1, Name = "Kiesbelag",                    Kategorie = "Boden · unversiegelt",   Kuehlwirkung = 5, Albedo = 3, ThgEmission = 6, Versickerung = 6, Lebensdauer = 3, UebereinstimmungPunkte = 44, UebereinstimmungMax = 54 },
         new() { Id = 2, Name = "Rasen",                         Kategorie = "Boden · begrünt",         Kuehlwirkung = 6, Albedo = 3, ThgEmission = 6, Versickerung = 3, Lebensdauer = 2, UebereinstimmungPunkte = 42, UebereinstimmungMax = 54 },
