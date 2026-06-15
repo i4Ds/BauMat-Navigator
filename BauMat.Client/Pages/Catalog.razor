@@ -174,18 +174,18 @@
         new() { Id = 6, Name = "Betonbelag",                    Kategorie = "Boden · versiegelt",      Kuehlwirkung = 2, Albedo = 3, ThgEmission = 2, Versickerung = 1, Lebensdauer = 6, UebereinstimmungPunkte = 28, UebereinstimmungMax = 54 },
     };
 
-    private class MaterialItem
+    private record MaterialItem
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = "";
-        public string Kategorie { get; set; } = "";
-        public int Kuehlwirkung { get; set; }
-        public int Albedo { get; set; }
-        public int ThgEmission { get; set; }
-        public int Versickerung { get; set; }
-        public int Lebensdauer { get; set; }
-        public int UebereinstimmungPunkte { get; set; }
-        public int UebereinstimmungMax { get; set; }
+        public int Id { get; init; }
+        public string Name { get; init; } = "";
+        public string Kategorie { get; init; } = "";
+        public int Kuehlwirkung { get; init; }
+        public int Albedo { get; init; }
+        public int ThgEmission { get; init; }
+        public int Versickerung { get; init; }
+        public int Lebensdauer { get; init; }
+        public int UebereinstimmungPunkte { get; init; }
+        public int UebereinstimmungMax { get; init; }
         public bool IsCompared { get; set; }
     }
 }
