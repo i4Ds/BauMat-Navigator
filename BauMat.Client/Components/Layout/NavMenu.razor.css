@@ -1,6 +1,6 @@
 .app-nav {
     display: flex;
-    gap: 0.125rem;
+    gap: 1rem;
     align-items: center;
 }
 
