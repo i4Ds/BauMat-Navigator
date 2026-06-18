@@ -55,9 +55,10 @@
                         @foreach (var p in Gewichtsparameter)
                         {
                             var aktuell = gewichte.TryGetValue(p, out var w) ? w : 0;
+                            var inputId = $"w-{p.Replace(" ", "-")}";
                             <div class="ml-weight-row">
-                                <label class="ml-weight-label" for="@($"w-{p}")">@p</label>
-                                <input id="@($"w-{p}")"
+                                <label class="ml-weight-label" for="@inputId">@p</label>
+                                <input id="@inputId"
                                        type="range"
                                        min="0"
                                        max="5"
