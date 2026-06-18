@@ -101,6 +101,6 @@ public partial class MaterialList
 
     [Inject] private NavigationManager Nav { get; set; } = default!;
 
-    private void OeffneDetail(int id) => Nav.NavigateTo($"/material/{id}");
+    private void OeffneDetail(int id) => Nav.NavigateTo($"material/{id}");
 
 }
