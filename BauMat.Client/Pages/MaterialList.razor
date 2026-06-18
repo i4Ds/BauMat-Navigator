@@ -106,6 +106,8 @@
                     {
                         <tr class="ml-row-link"
                             tabindex="0"
+                            role="link"
+                            aria-label="@($"{m.Name} öffnen")"
                             @onclick="() => OeffneDetail(m.Id)"
                             @onkeydown="@(e => { if (e.Key == "Enter" || e.Key == " ") OeffneDetail(m.Id); })">
                             <td class="ml-cell-name">@m.Name</td>
