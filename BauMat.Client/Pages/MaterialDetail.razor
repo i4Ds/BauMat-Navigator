@@ -51,7 +51,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var p in ParameterTabelle())
+                        @foreach (var p in GetParameterTable(Gefunden))
                         {
                             <tr>
                                 <td class="md-cell-param">@p.Name</td>

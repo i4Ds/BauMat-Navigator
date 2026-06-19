@@ -96,13 +96,13 @@ public partial class MaterialDetail
 
     private record Parameter(string Name, string Wert, string Einheit);
 
-    private IEnumerable<Parameter> ParameterTabelle()
+    private static IEnumerable<Parameter> GetParameterTable(Material? material)
     {
-        if (Gefunden is null) yield break;
+        if (material is null) yield break;
 
-        yield return new("PET Tag", Gefunden.PetTag.ToString("0.0"), "°C");
-        yield return new("Albedo", Gefunden.Albedo.ToString("0.00"), "-");
-        yield return new("Lebensdauer", Gefunden.Lebensdauer.ToString(), "Jahre");
-        yield return new("THG", Gefunden.Thg.ToString("0"), "kg CO₂-eq/m²");
+        yield return new("PET Tag", material.PetTag.ToString("0.0"), "°C");
+        yield return new("Albedo", material.Albedo.ToString("0.00"), "-");
+        yield return new("Lebensdauer", material.Lebensdauer.ToString(), "Jahre");
+        yield return new("THG", material.Thg.ToString("0"), "kg CO₂-eq/m²");
     }
 }
