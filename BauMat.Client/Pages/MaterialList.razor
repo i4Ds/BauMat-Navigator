@@ -1,11 +1,11 @@
-﻿@page "/katalog/{kategorie}"
+﻿@page "/katalog/{category}"
 
-<PageTitle>Katalog – @Kategorie</PageTitle>
+<PageTitle>Katalog – @Category</PageTitle>
 
 <div class="ml-page">
 
     <header class="ml-header">
-        <h1 class="ml-title">Katalog: @Kategorie</h1>
+        <h1 class="ml-title">Katalog: @Category</h1>
         <p class="ml-subtitle">@FilterStatus</p>
     </header>
 
@@ -14,24 +14,24 @@
         @* ── Sidebar ─────────────────────────────────────── *@
         <aside class="ml-sidebar">
 
-            @* ── Filter-Panel (default zu) ─────────────────── *@
-            <section class="ml-panel @(filterOffen ? "ml-panel-open" : "")">
+            @* ── Filter panel (collapsed by default) ───────── *@
+            <section class="ml-panel @(filterOpen ? "ml-panel-open" : "")">
                 <button type="button" class="ml-panel-head" @onclick="ToggleFilter">
-                    <span class="ml-panel-caret">@(filterOffen ? "▾" : "▸")</span>
+                    <span class="ml-panel-caret">@(filterOpen ? "▾" : "▸")</span>
                     <span class="ml-panel-title">Filter</span>
                     <span class="ml-panel-meta">@ActiveType</span>
                 </button>
-                @if (filterOffen)
+                @if (filterOpen)
                 {
                     <div class="ml-panel-body">
                         <p class="ml-panel-label">Konstruktionstyp</p>
                         <div class="ml-chip-stack">
-                            @foreach (var typ in Konstruktionstypen)
+                            @foreach (var type in ConstructionTypes)
                             {
                                 <button type="button"
-                                        class="ml-chip @(typ == ActiveType ? "ml-chip-active" : "")"
-                                        @onclick="() => ActiveType = typ">
-                                    @typ
+                                        class="ml-chip @(type == ActiveType ? "ml-chip-active" : "")"
+                                        @onclick="() => ActiveType = type">
+                                    @type
                                 </button>
                             }
                         </div>
@@ -39,22 +39,22 @@
                 }
             </section>
 
-            @* ── Gewichtungs-Panel (default offen) ────────── *@
-            <section class="ml-panel @(gewichtungOffen ? "ml-panel-open" : "")">
-                <button type="button" class="ml-panel-head" @onclick="ToggleGewichtung">
-                    <span class="ml-panel-caret">@(gewichtungOffen ? "▾" : "▸")</span>
+            @* ── Weighting panel (open by default) ────────── *@
+            <section class="ml-panel @(weightingOpen ? "ml-panel-open" : "")">
+                <button type="button" class="ml-panel-head" @onclick="ToggleWeighting">
+                    <span class="ml-panel-caret">@(weightingOpen ? "▾" : "▸")</span>
                     <span class="ml-panel-title">Gewichtung</span>
                 </button>
-                @if (gewichtungOffen)
+                @if (weightingOpen)
                 {
                     <div class="ml-panel-body">
                         <p class="ml-panel-hint">
                             Welche Parameter sind dir wichtig?
                             (Demo — die Tabelle reagiert noch nicht.)
                         </p>
-                        @foreach (var p in Gewichtsparameter)
+                        @foreach (var p in WeightParameters)
                         {
-                            var aktuell = gewichte.TryGetValue(p, out var w) ? w : 0;
+                            var current = weights.TryGetValue(p, out var w) ? w : 0;
                             var inputId = $"w-{p.Replace(" ", "-")}";
                             <div class="ml-weight-row">
                                 <label class="ml-weight-label" for="@inputId">@p</label>
@@ -64,14 +64,14 @@
                                        max="5"
                                        step="1"
                                        class="ml-slider"
-                                       value="@aktuell"
-                                       @oninput="(e) => SetzeGewicht(p, e.Value)" />
-                                <span class="ml-weight-value">@aktuell</span>
+                                       value="@current"
+                                       @oninput="(e) => SetWeight(p, e.Value)" />
+                                <span class="ml-weight-value">@current</span>
                             </div>
                         }
                         <button type="button"
                                 class="ml-reset"
-                                @onclick="GewichteZuruecksetzen">
+                                @onclick="ResetWeights">
                             Zurücksetzen
                         </button>
                     </div>
@@ -80,7 +80,7 @@
 
         </aside>
 
-        @* ── Tabelle ─────────────────────────────────────── *@
+        @* ── Table ───────────────────────────────────────── *@
         <div class="ml-table-wrap">
             <table class="ml-table">
                 <thead>
@@ -102,23 +102,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var m in GefilterteMaterialien)
+                    @foreach (var m in FilteredMaterials)
                     {
                         <tr class="ml-row-link"
                             tabindex="0"
                             role="link"
                             aria-label="@($"{m.Name} öffnen")"
-                            @onclick="() => OeffneDetail(m.Id)"
-                            @onkeydown="@(e => { if (e.Key == "Enter" || e.Key == " ") OeffneDetail(m.Id); })">
+                            @onclick="() => OpenDetail(m.Id)"
+                            @onkeydown="@(e => { if (e.Key == "Enter" || e.Key == " ") OpenDetail(m.Id); })">
                             <td class="ml-cell-name">@m.Name</td>
-                            <td class="ml-cell-typ">@m.Konstruktionstyp</td>
+                            <td class="ml-cell-typ">@m.ConstructionType</td>
                             <td class="ml-cell-num">@m.PetTag.ToString("0.0")</td>
                             <td class="ml-cell-num">@m.Albedo.ToString("0.00")</td>
-                            <td class="ml-cell-num">@m.Lebensdauer</td>
-                            <td class="ml-cell-num">@m.Thg.ToString("0")</td>
+                            <td class="ml-cell-num">@m.Lifespan</td>
+                            <td class="ml-cell-num">@m.Ghg.ToString("0")</td>
                         </tr>
                     }
-                    @if (!GefilterteMaterialien.Any())
+                    @if (!FilteredMaterials.Any())
                     {
                         <tr>
                             <td colspan="6" class="ml-empty">
@@ -132,3 +132,104 @@
 
     </div>
 </div>
+
+@code {
+    // Catalog list view of a material category (Issue #3).
+
+    // Category from the route (/katalog/{category}).
+    [Parameter] public string Category { get; set; } = "";
+
+    // ── Mock data ──────────────────────────────────────────────────────────
+    // Inline data for the prototype. Real data from the PDF catalog is built
+    // out in Issue #11 (JSON + deserialization).
+
+    private record MaterialData(
+        int Id,
+        string Name,
+        string ConstructionType,
+        double PetTag,
+        double Albedo,
+        int Lifespan,
+        double Ghg);
+
+    private readonly List<MaterialData> Materials = new()
+    {
+        new(1, "Asphalt dunkel",          "Versiegelt",     38.2, 0.08, 25, 45),
+        new(2, "Kiesbelag",               "Unversiegelt",   32.1, 0.30, 30, 12),
+        new(3, "Rasen",                   "Begrünt",        28.5, 0.25, 15,  5),
+        new(4, "Steinplattenpflasterung", "Versiegelt",     35.0, 0.20, 60, 65),
+        new(5, "Betonpflaster, hell",     "Teilversiegelt", 33.5, 0.45, 40, 38),
+    };
+
+    // ── Filter ─────────────────────────────────────────────────────────────
+
+    private const string All = "Alle";
+
+    private string ActiveType { get; set; } = All;
+
+    private IEnumerable<string> ConstructionTypes =>
+        new[] { All }
+            .Concat(Materials.Select(m => m.ConstructionType).Distinct().OrderBy(s => s));
+
+    private IEnumerable<MaterialData> FilteredMaterials =>
+        ActiveType == All
+            ? Materials
+            : Materials.Where(m => m.ConstructionType == ActiveType);
+
+    private string FilterStatus
+    {
+        get
+        {
+            var total = Materials.Count;
+            var shown = FilteredMaterials.Count();
+            return ActiveType == All
+                ? $"{total} Materialien"
+                : $"{shown} von {total} Materialien";
+        }
+    }
+
+    // ── Panel visibility ───────────────────────────────────────────────────
+
+    private bool filterOpen = false;
+    private bool weightingOpen = true;
+
+    private void ToggleFilter() => filterOpen = !filterOpen;
+    private void ToggleWeighting() => weightingOpen = !weightingOpen;
+
+    // ── Weighting ──────────────────────────────────────────────────────────
+    //
+    // TODO: the weights are not applied to the table sorting yet. The actual
+    // weighted sorting (MCDM – Multi-Criteria Decision Making) follows in a
+    // later step.
+
+    private static readonly string[] WeightParameters =
+        { "PET Tag", "Albedo", "Lebensdauer", "THG" };
+
+    private readonly Dictionary<string, int> weights = new();
+
+    protected override void OnInitialized()
+    {
+        foreach (var p in WeightParameters)
+            weights[p] = 0;
+    }
+
+    private void SetWeight(string parameter, object? value)
+    {
+        if (int.TryParse(value?.ToString(), out var g))
+        {
+            weights[parameter] = Math.Clamp(g, 0, 5);
+        }
+    }
+
+    private void ResetWeights()
+    {
+        foreach (var p in WeightParameters)
+            weights[p] = 0;
+    }
+
+    // ── Navigation to the detail page ──────────────────────────────────────
+
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private void OpenDetail(int id) => Navigation.NavigateTo($"material/{id}");
+}
