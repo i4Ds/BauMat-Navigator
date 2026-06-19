@@ -79,7 +79,8 @@ public partial class MaterialList
 
     protected override void OnInitialized()
     {
-        foreach (var p in Gewichtsparameter) gewichte[p] = 0;
+        foreach (var p in Gewichtsparameter)
+            gewichte[p] = 0;
     }
 
     private void SetzeGewicht(string parameter, object? value)
@@ -92,7 +93,8 @@ public partial class MaterialList
 
     private void GewichteZuruecksetzen()
     {
-        foreach (var p in Gewichtsparameter) gewichte[p] = 0;
+        foreach (var p in Gewichtsparameter)
+            gewichte[p] = 0;
     }
 
     // ── Navigation zur Detail-Seite ───────────────────────────────────────
