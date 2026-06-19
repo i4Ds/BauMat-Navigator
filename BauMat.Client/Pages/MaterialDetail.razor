@@ -8,14 +8,7 @@
        Datenmodell steckt wird das Ziel dynamisch abgeleitet. *@
     <a class="md-back" href="katalog/boden">← Zurück zur Liste</a>
 
-    @if (Gefunden is null)
-    {
-        <div class="md-notfound">
-            <h1>Material nicht gefunden</h1>
-            <p>Es gibt kein Material mit der Id <strong>@Id</strong>.</p>
-        </div>
-    }
-    else
+    @if (Gefunden is not null)
     {
         <header class="md-header">
             <div class="md-header-text">
