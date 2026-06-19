@@ -34,16 +34,16 @@ public partial class MaterialList
     // ── Filter ────────────────────────────────────────────────────────────
 
     private const string Alle = "Alle";
-    private string aktiverTyp = Alle;
+    private string ActiveType { get; set; } = Alle;
 
     private IEnumerable<string> Konstruktionstypen =>
         new[] { Alle }
             .Concat(Materialien.Select(m => m.Konstruktionstyp).Distinct().OrderBy(s => s));
 
     private IEnumerable<Material> GefilterteMaterialien =>
-        aktiverTyp == Alle
+        ActiveType == Alle
             ? Materialien
-            : Materialien.Where(m => m.Konstruktionstyp == aktiverTyp);
+            : Materialien.Where(m => m.Konstruktionstyp == ActiveType);
 
     private string FilterStatus
     {
@@ -51,13 +51,11 @@ public partial class MaterialList
         {
             var total = Materialien.Count;
             var gezeigt = GefilterteMaterialien.Count();
-            return aktiverTyp == Alle
+            return ActiveType == Alle
                 ? $"{total} Materialien"
                 : $"{gezeigt} von {total} Materialien";
         }
     }
-
-    private void SetzeFilter(string typ) => aktiverTyp = typ;
 
 
     // ── Panel-Sichtbarkeit ────────────────────────────────────────────────
