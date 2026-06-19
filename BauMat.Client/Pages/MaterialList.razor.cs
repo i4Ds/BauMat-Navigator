@@ -27,7 +27,7 @@ public partial class MaterialList
         new(1, "Asphalt dunkel",          "Versiegelt",     38.2, 0.08, 25, 45),
         new(2, "Kiesbelag",               "Unversiegelt",   32.1, 0.30, 30, 12),
         new(3, "Rasen",                   "Begrünt",        28.5, 0.25, 15,  5),
-        new(4, "Steinplattenpflästerung", "Versiegelt",     35.0, 0.20, 60, 65),
+        new(4, "Steinplattenpflasterung", "Versiegelt",     35.0, 0.20, 60, 65),
         new(5, "Betonpflaster, hell",     "Teilversiegelt", 33.5, 0.45, 40, 38),
     };
 
