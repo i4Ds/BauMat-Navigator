@@ -7,5 +7,11 @@
 var inputFile = args[0];
 var outputFile = args[1];
 
-Console.WriteLine("Input File: " + inputFile);
-Console.WriteLine("Output File: " + outputFile);
+if (!File.Exists(inputFile))
+{
+    Console.Error.WriteLine($"Input file '{inputFile}' does not exist.");
+    return;
+}
+
+Console.WriteLine($"Input File: {inputFile}");
+Console.WriteLine($"Output File: {outputFile}");
