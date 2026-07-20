@@ -7,7 +7,7 @@
 
     <header class="ml-header">
         <h1 class="ml-title">@PageHeading</h1>
-        <p class="ml-subtitle">@FilterStatus</p>
+        <p class="ml-subtitle">@FilterStatus@(ComparedCount > 0 ? $" · {ComparedCount} im Vergleich" : "")</p>
     </header>
 
     <div class="ml-layout">
@@ -235,4 +235,24 @@
     [Inject] private NavigationManager Navigation { get; set; } = default!;
 
     private void OpenDetail(int id) => Navigation.NavigateTo($"material/{id}");
+
+    // ── Compare selection ────────────────────────────────────────────────
+    //
+    // Local HashSet instead of a mutable property on MaterialData, so the
+    // record stays immutable. Prepares for a central CompareState service
+    // (Issue #9) without introducing one yet.
+
+    private readonly HashSet<int> _comparedIds = new();
+
+    private bool IsCompared(int id) => _comparedIds.Contains(id);
+
+    private int ComparedCount => _comparedIds.Count;
+
+    private void ToggleCompare(int id)
+    {
+        if (!_comparedIds.Remove(id))
+        {
+            _comparedIds.Add(id);
+        }
+    }
 }
