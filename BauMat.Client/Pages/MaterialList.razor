@@ -1,11 +1,12 @@
-﻿@page "/katalog/{category}"
+﻿@page "/katalog"
+@page "/katalog/{category}"
 
-<PageTitle>Katalog – @Category</PageTitle>
+<PageTitle>@(string.IsNullOrEmpty(Category) ? "Klimamaterial – Katalog" : $"Katalog – {Category}")</PageTitle>
 
 <div class="ml-page">
 
     <header class="ml-header">
-        <h1 class="ml-title">Katalog: @Category</h1>
+        <h1 class="ml-title">@(string.IsNullOrEmpty(Category) ? "Katalog" : Category)</h1>
         <p class="ml-subtitle">@FilterStatus</p>
     </header>
 
