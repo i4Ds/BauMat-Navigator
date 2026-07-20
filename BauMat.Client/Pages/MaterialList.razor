@@ -92,6 +92,7 @@
                         <th class="ml-col-num">Albedo</th>
                         <th class="ml-col-num">Lebensdauer</th>
                         <th class="ml-col-num">THG</th>
+                        <th class="ml-col-action">Aktion</th>
                     </tr>
                     <tr class="ml-units">
                         <th></th>
@@ -100,12 +101,13 @@
                         <th class="ml-col-num">-</th>
                         <th class="ml-col-num">Jahre</th>
                         <th class="ml-col-num">kg CO₂-eq/m²</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var m in FilteredMaterials)
                     {
-                        <tr class="ml-row-link"
+                        <tr class="ml-row-link @(IsCompared(m.Id) ? "ml-row-compared" : "")"
                             tabindex="0"
                             role="link"
                             aria-label="@($"{m.Name} öffnen")"
@@ -117,12 +119,21 @@
                             <td class="ml-cell-num">@m.Albedo.ToString("0.00")</td>
                             <td class="ml-cell-num">@m.Lifespan</td>
                             <td class="ml-cell-num">@m.Ghg.ToString("0")</td>
+                            <td class="ml-cell-action">
+                                <button class="ml-compare-btn @(IsCompared(m.Id) ? "compared" : "")"
+                                        type="button"
+                                        @onclick="() => ToggleCompare(m.Id)"
+                                        @onclick:stopPropagation="true"
+                                        @onkeydown:stopPropagation="true">
+                                    @(IsCompared(m.Id) ? "✓ Im Vergleich" : "+ Vergleichen")
+                                </button>
+                            </td>
                         </tr>
                     }
                     @if (!FilteredMaterials.Any())
                     {
                         <tr>
-                            <td colspan="6" class="ml-empty">
+                            <td colspan="7" class="ml-empty">
                                 Keine Materialien für Filter „@ActiveType".
                             </td>
                         </tr>
