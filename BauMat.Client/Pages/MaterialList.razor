@@ -1,11 +1,12 @@
-﻿@page "/katalog/{category}"
+﻿@page "/katalog"
+@page "/katalog/{category}"
 
-<PageTitle>Katalog – @Category</PageTitle>
+<PageTitle>@PageHeading</PageTitle>
 
 <div class="ml-page">
 
     <header class="ml-header">
-        <h1 class="ml-title">Katalog: @Category</h1>
+        <h1 class="ml-title">@PageHeading</h1>
         <p class="ml-subtitle">@FilterStatus</p>
     </header>
 
@@ -136,8 +137,10 @@
 @code {
     // Catalog list view of a material category (Issue #3).
 
-    // Category from the route (/katalog/{category}).
+    // Category from the route (/katalog or /katalog/{category}).
     [Parameter] public string Category { get; set; } = "";
+
+    private string PageHeading => string.IsNullOrEmpty(Category) ? "Katalog" : $"Katalog: {Category}";
 
     // ── Mock data ──────────────────────────────────────────────────────────
     // Inline data for the prototype. Real data from the PDF catalog is built
