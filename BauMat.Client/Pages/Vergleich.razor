@@ -1,17 +1,120 @@
 @page "/vergleich"
+@implements IDisposable
+@inject CompareState CompareState
+@inject MaterialService MaterialService
 
-<PageTitle>Klimamaterial – Vergleich</PageTitle>
+<PageTitle>Materialvergleich</PageTitle>
 
-<div class="placeholder-page">
-    <div class="placeholder-icon">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-            <rect x="4" y="8" width="16" height="32" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
-            <rect x="28" y="14" width="16" height="26" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
-            <line x1="12" y1="16" x2="12" y2="32" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
-            <line x1="36" y1="22" x2="36" y2="32" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-    </div>
-    <h2 class="placeholder-title">Materialvergleich</h2>
-    <p class="placeholder-text">Wählen Sie Materialien im Katalog aus, um sie hier direkt zu vergleichen.</p>
-    <a href="" class="placeholder-link">Zur Startseite</a>
-</div>
+@if (ComparedMaterials.Count == 0)
+{
+    <section class="comparison-empty">
+        <h1>Materialvergleich</h1>
+        <p>Du hast noch keine Materialien für den Vergleich ausgewählt.</p>
+        <a href="katalog">Zum Katalog →</a>
+    </section>
+}
+else
+{
+    <section class="comparison-page">
+        <header class="comparison-header">
+            <div>
+                <a class="comparison-back" href="katalog">← Zurück zum Katalog</a>
+                <h1>Materialvergleich</h1>
+                <p>@ComparedMaterials.Count Materialien im Vergleich</p>
+            </div>
+
+            <button type="button"
+                    class="comparison-clear"
+                    @onclick="CompareState.Clear">
+                Auswahl leeren
+            </button>
+        </header>
+
+        <div class="comparison-table-wrapper">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Parameter</th>
+
+                        @foreach (var material in ComparedMaterials)
+                        {
+                            <th scope="col">@material.Name</th>
+                        }
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <th scope="row">Konstruktionstyp</th>
+
+                        @foreach (var material in ComparedMaterials)
+                        {
+                            <td>@material.ConstructionType</td>
+                        }
+                    </tr>
+
+                    <tr>
+                        <th scope="row">PET Tag</th>
+
+                        @foreach (var material in ComparedMaterials)
+                        {
+                            <td>@($"{material.PetTag:0.0} °C")</td>
+                        }
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Albedo</th>
+
+                        @foreach (var material in ComparedMaterials)
+                        {
+                            <td>@material.Albedo.ToString("0.00")</td>
+                        }
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Lebensdauer</th>
+
+                        @foreach (var material in ComparedMaterials)
+                        {
+                            <td>@($"{material.Lifespan} Jahre")</td>
+                        }
+                    </tr>
+
+                    <tr>
+                        <th scope="row">THG</th>
+
+                        @foreach (var material in ComparedMaterials)
+                        {
+                            <td>@($"{material.Ghg:0.#} kg CO₂-eq/m²")</td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+}
+
+@code {
+    // Side-by-side material comparison (Issue #9). Materials are resolved
+    // from MaterialService.All (not CompareState.Ids directly) so the
+    // column order stays stable and matches the catalog order.
+    private IReadOnlyList<Material> ComparedMaterials =>
+        MaterialService.All
+            .Where(material => CompareState.Contains(material.Id))
+            .ToList();
+
+    protected override void OnInitialized()
+    {
+        CompareState.OnChanged += HandleCompareStateChanged;
+    }
+
+    private void HandleCompareStateChanged()
+    {
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        CompareState.OnChanged -= HandleCompareStateChanged;
+    }
+}

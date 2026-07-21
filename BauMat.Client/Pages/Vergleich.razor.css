@@ -1,0 +1,142 @@
+/* ── Empty state ─────────────────────────────────────── */
+
+.comparison-empty {
+    padding: 3rem 0;
+    color: #6b7280;
+}
+
+    .comparison-empty h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 0.5rem 0;
+        letter-spacing: -0.02em;
+    }
+
+    .comparison-empty p {
+        margin: 0 0 1rem 0;
+    }
+
+    .comparison-empty a {
+        color: #16a34a;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .comparison-empty a:hover {
+            text-decoration: underline;
+        }
+
+/* ── Page layout ─────────────────────────────────────── */
+
+.comparison-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.comparison-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.comparison-back {
+    display: inline-block;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+    .comparison-back:hover {
+        color: #111827;
+        text-decoration: underline;
+    }
+
+.comparison-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.comparison-header p {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0.25rem 0 0 0;
+}
+
+/* ── Clear button ─────────────────────────────────────── */
+
+.comparison-clear {
+    flex-shrink: 0;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+    .comparison-clear:hover {
+        background: #f9fafb;
+        border-color: #9ca3af;
+        color: #111827;
+    }
+
+    .comparison-clear:focus-visible {
+        outline: 2px solid #111827;
+        outline-offset: 2px;
+    }
+
+/* ── Table ───────────────────────────────────────────── */
+
+.comparison-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+}
+
+.comparison-table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    text-align: left;
+    vertical-align: top;
+}
+
+.comparison-table thead th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.comparison-table tbody th {
+    background: #f9fafb;
+    font-weight: 500;
+    color: #111827;
+    white-space: nowrap;
+}
+
+.comparison-table tbody tr:last-child td,
+.comparison-table tbody tr:last-child th {
+    border-bottom: 0;
+}
