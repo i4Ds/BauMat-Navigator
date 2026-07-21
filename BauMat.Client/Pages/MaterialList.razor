@@ -11,6 +11,13 @@
     <header class="ml-header">
         <h1 class="ml-title">@PageHeading</h1>
         <p class="ml-subtitle">@FilterStatus@(CompareState.Count > 0 ? $" · {CompareState.Count} im Vergleich" : "")</p>
+
+        @if (CompareState.Count > 0)
+        {
+            <a class="ml-compare-nav" href="vergleich">
+                Vergleich anzeigen (@CompareState.Count) →
+            </a>
+        }
     </header>
 
     <div class="ml-layout">

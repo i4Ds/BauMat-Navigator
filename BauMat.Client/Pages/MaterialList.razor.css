@@ -25,6 +25,26 @@
     margin: 0.25rem 0 0 0;
 }
 
+.ml-compare-nav {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    color: #16a34a;
+    text-decoration: none;
+}
+
+    .ml-compare-nav:hover {
+        color: #15803d;
+        text-decoration: underline;
+    }
+
+    .ml-compare-nav:focus-visible {
+        outline: 2px solid #111827;
+        outline-offset: 2px;
+    }
+
 /* ── Two-column layout: sidebar + table ──────────────── */
 
 .ml-layout {
