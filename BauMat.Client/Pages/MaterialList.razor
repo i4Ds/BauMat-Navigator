@@ -1,5 +1,8 @@
 ﻿@page "/katalog"
 @page "/katalog/{category}"
+@implements IDisposable
+@inject CompareState CompareState
+@inject MaterialService MaterialService
 
 <PageTitle>@PageHeading</PageTitle>
 
@@ -7,7 +10,7 @@
 
     <header class="ml-header">
         <h1 class="ml-title">@PageHeading</h1>
-        <p class="ml-subtitle">@FilterStatus@(ComparedCount > 0 ? $" · {ComparedCount} im Vergleich" : "")</p>
+        <p class="ml-subtitle">@FilterStatus@(CompareState.Count > 0 ? $" · {CompareState.Count} im Vergleich" : "")</p>
     </header>
 
     <div class="ml-layout">
@@ -107,7 +110,7 @@
                 <tbody>
                     @foreach (var m in FilteredMaterials)
                     {
-                        <tr class="ml-row-link @(IsCompared(m.Id) ? "ml-row-compared" : "")"
+                        <tr class="ml-row-link @(CompareState.Contains(m.Id) ? "ml-row-compared" : "")"
                             tabindex="0"
                             role="link"
                             aria-label="@($"{m.Name} öffnen")"
@@ -120,12 +123,12 @@
                             <td class="ml-cell-num">@m.Lifespan</td>
                             <td class="ml-cell-num">@m.Ghg.ToString("0")</td>
                             <td class="ml-cell-action">
-                                <button class="ml-compare-btn @(IsCompared(m.Id) ? "compared" : "")"
+                                <button class="ml-compare-btn @(CompareState.Contains(m.Id) ? "compared" : "")"
                                         type="button"
-                                        @onclick="() => ToggleCompare(m.Id)"
+                                        @onclick="() => CompareState.Toggle(m.Id)"
                                         @onclick:stopPropagation="true"
                                         @onkeydown:stopPropagation="true">
-                                    @(IsCompared(m.Id) ? "✓ Im Vergleich" : "+ Vergleichen")
+                                    @(CompareState.Contains(m.Id) ? "✓ Im Vergleich" : "+ Vergleichen")
                                 </button>
                             </td>
                         </tr>
@@ -153,28 +156,6 @@
 
     private string PageHeading => string.IsNullOrEmpty(Category) ? "Katalog" : $"Katalog: {Category}";
 
-    // ── Mock data ──────────────────────────────────────────────────────────
-    // Inline data for the prototype. Real data from the PDF catalog is built
-    // out in Issue #11 (JSON + deserialization).
-
-    private record MaterialData(
-        int Id,
-        string Name,
-        string ConstructionType,
-        double PetTag,
-        double Albedo,
-        int Lifespan,
-        double Ghg);
-
-    private readonly List<MaterialData> Materials = new()
-    {
-        new(1, "Asphalt dunkel",          "Versiegelt",     38.2, 0.08, 25, 45),
-        new(2, "Kiesbelag",               "Unversiegelt",   32.1, 0.30, 30, 12),
-        new(3, "Rasen",                   "Begrünt",        28.5, 0.25, 15,  5),
-        new(4, "Steinplattenpflasterung", "Versiegelt",     35.0, 0.20, 60, 65),
-        new(5, "Betonpflaster, hell",     "Teilversiegelt", 33.5, 0.45, 40, 38),
-    };
-
     // ── Filter ─────────────────────────────────────────────────────────────
 
     private const string All = "Alle";
@@ -183,18 +164,18 @@
 
     private IEnumerable<string> ConstructionTypes =>
         new[] { All }
-            .Concat(Materials.Select(m => m.ConstructionType).Distinct().OrderBy(s => s));
+            .Concat(MaterialService.All.Select(m => m.ConstructionType).Distinct().OrderBy(s => s));
 
-    private IEnumerable<MaterialData> FilteredMaterials =>
+    private IEnumerable<Material> FilteredMaterials =>
         ActiveType == All
-            ? Materials
-            : Materials.Where(m => m.ConstructionType == ActiveType);
+            ? MaterialService.All
+            : MaterialService.All.Where(m => m.ConstructionType == ActiveType);
 
     private string FilterStatus
     {
         get
         {
-            var total = Materials.Count;
+            var total = MaterialService.All.Count;
             var shown = FilteredMaterials.Count();
             return ActiveType == All
                 ? $"{total} Materialien"
@@ -221,12 +202,6 @@
 
     private readonly Dictionary<string, int> weights = new();
 
-    protected override void OnInitialized()
-    {
-        foreach (var p in WeightParameters)
-            weights[p] = 0;
-    }
-
     private void SetWeight(string parameter, object? value)
     {
         if (int.TryParse(value?.ToString(), out var g))
@@ -249,21 +224,23 @@
 
     // ── Compare selection ────────────────────────────────────────────────
     //
-    // Local HashSet instead of a mutable property on MaterialData, so the
-    // record stays immutable. Prepares for a central CompareState service
-    // (Issue #9) without introducing one yet.
+    // Shared across components via the scoped CompareState service (Issue #9).
 
-    private readonly HashSet<int> _comparedIds = new();
-
-    private bool IsCompared(int id) => _comparedIds.Contains(id);
-
-    private int ComparedCount => _comparedIds.Count;
-
-    private void ToggleCompare(int id)
+    protected override void OnInitialized()
     {
-        if (!_comparedIds.Remove(id))
-        {
-            _comparedIds.Add(id);
-        }
+        foreach (var p in WeightParameters)
+            weights[p] = 0;
+
+        CompareState.OnChanged += HandleCompareStateChanged;
+    }
+
+    private void HandleCompareStateChanged()
+    {
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        CompareState.OnChanged -= HandleCompareStateChanged;
     }
 }
