@@ -1,4 +1,4 @@
-﻿.md-page {
+.md-page {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -17,18 +17,6 @@
     .md-back:hover {
         color: #111827;
         text-decoration: underline;
-    }
-
-/* ── Not found ───────────────────────────────────────── */
-
-.md-notfound {
-    color: #6b7280;
-    padding: 2rem 0;
-}
-
-    .md-notfound h1 {
-        color: #111827;
-        margin: 0 0 0.5rem 0;
     }
 
 /* ── Header ──────────────────────────────────────────── */
