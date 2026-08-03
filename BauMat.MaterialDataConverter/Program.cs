@@ -1,4 +1,6 @@
-﻿if (args.Length < 2)
+﻿using ClosedXML.Excel;
+
+if (args.Length < 2)
 {
     Console.WriteLine("Usage: BauMat.MaterialDataConverter <inputFile> <outputFile>");
     return;
@@ -13,5 +15,8 @@ if (!File.Exists(inputFile))
     return;
 }
 
+using var workbook = new XLWorkbook(inputFile);
+
+Console.WriteLine("Excel File opened successfully.");
 Console.WriteLine($"Input File: {inputFile}");
 Console.WriteLine($"Output File: {outputFile}");
