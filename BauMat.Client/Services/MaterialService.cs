@@ -4,6 +4,9 @@ namespace BauMat.Client.Services;
 
 public sealed class MaterialService
 {
+    // Data is currently inlined here with placeholder description texts.
+    // This will be replaced by a real data source (e.g. loaded from
+    // BauMat.MaterialDataConverter output) once one is available.
     public IReadOnlyList<Material> All { get; } = new[]
     {
         new Material(1, "Asphalt dunkel", "Versiegelt", 38.2, 0.08, 25, 45,
