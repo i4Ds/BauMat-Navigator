@@ -17,6 +17,13 @@ if (!File.Exists(inputFile))
 
 using var workbook = new XLWorkbook(inputFile);
 
+if (!workbook.Worksheets.TryGetWorksheet("Daten_Alle", out var worksheet))
+{
+    Console.Error.WriteLine("Worksheet 'Daten_Alle' not found in the Excel file.");
+    return;
+}
+
+Console.WriteLine("Worksheet 'Daten_Alle' found.");
 Console.WriteLine("Excel File opened successfully.");
 Console.WriteLine($"Input File: {inputFile}");
 Console.WriteLine($"Output File: {outputFile}");
