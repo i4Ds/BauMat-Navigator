@@ -23,6 +23,32 @@ if (!workbook.Worksheets.TryGetWorksheet("Daten_Alle", out var worksheet))
     return;
 }
 
+
+var firstMaterialColumn = 4;
+var lastUsedColumn = worksheet.LastColumnUsed();
+
+if (lastUsedColumn is null)
+{
+    Console.Error.WriteLine("Daten_Alle ist Leer");
+    return;
+}
+
+var lastUsedColumnNumber = lastUsedColumn.ColumnNumber();
+
+for (var column = firstMaterialColumn; column <= lastUsedColumnNumber; column++)
+{
+    var materialId = worksheet.Cell(2, column).GetString().Trim();
+
+    if (string.IsNullOrWhiteSpace(materialId))
+    {
+        break;
+    }
+
+    var materialName = worksheet.Cell(3, column).GetString().Trim();
+
+    Console.WriteLine($"Material Name: {materialName}, MaterialId: {materialId}");
+}
+
 Console.WriteLine("Worksheet 'Daten_Alle' found.");
 Console.WriteLine("Excel File opened successfully.");
 Console.WriteLine($"Input File: {inputFile}");
