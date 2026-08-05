@@ -140,3 +140,8 @@
 .comparison-table tbody tr:last-child th {
     border-bottom: 0;
 }
+
+.comparison-table td,
+.comparison-table thead th:not(:first-child) {
+    border-left: 1px solid #e5e7eb;
+}
