@@ -38,7 +38,17 @@ else
 
                         @foreach (var material in ComparedMaterials)
                         {
-                            <th scope="col">@material.Name</th>
+                            <th scope="col" class="comparison-col-head">
+                                <div class="comparison-col-top">
+                                    <span class="comparison-col-name">@material.Name</span>
+                                    <button class="comparison-col-remove"
+                                            title="Aus Vergleich entfernen"
+                                            @onclick="() => RemoveFromCompare(material.Id)"
+                                            @onclick:stopPropagation="true">
+                                        ×
+                                    </button>
+                                </div>
+                            </th>
                         }
                     </tr>
                 </thead>
@@ -112,6 +122,8 @@ else
     {
         _ = InvokeAsync(StateHasChanged);
     }
+
+    private void RemoveFromCompare(int id) => CompareState.Toggle(id);
 
     public void Dispose()
     {
