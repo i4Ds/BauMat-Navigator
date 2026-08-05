@@ -179,3 +179,15 @@
     outline: 2px solid #111827;
     outline-offset: 2px;
 }
+
+.comparison-view-toggle {
+    display: inline-block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #16a34a;
+    text-decoration: none;
+}
+
+.comparison-view-toggle:hover {
+    text-decoration: underline;
+}
