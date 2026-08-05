@@ -189,3 +189,15 @@
         grid-template-columns: 1fr;
     }
 }
+
+.v2-view-toggle {
+    display: inline-block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #16a34a;
+    text-decoration: none;
+}
+
+.v2-view-toggle:hover {
+    text-decoration: underline;
+}
