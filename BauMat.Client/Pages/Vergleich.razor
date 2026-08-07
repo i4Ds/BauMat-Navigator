@@ -16,19 +16,7 @@
 else
 {
     <section class="comparison-page">
-        <header class="comparison-header">
-            <div>
-                <a class="comparison-back" href="katalog">← Zurück zum Katalog</a>
-                <h1>Materialvergleich</h1>
-                <p>@ComparedMaterials.Count Materialien im Vergleich</p>
-            </div>
-
-            <button type="button"
-                    class="comparison-clear"
-                    @onclick="CompareState.Clear">
-                Auswahl leeren
-            </button>
-        </header>
+        <ComparisonHeader Count="@ComparedMaterials.Count" OnClear="CompareState.Clear" />
 
         <ViewToggle Active="table" />
 

@@ -1,0 +1,21 @@
+<header class="comparison-header">
+    <div>
+        <a class="comparison-back" href="katalog">← Zurück zum Katalog</a>
+        <h1>Materialvergleich</h1>
+        <p>@Count Materialien im Vergleich</p>
+    </div>
+
+    <button type="button"
+            class="comparison-clear"
+            @onclick="OnClear">
+        Auswahl leeren
+    </button>
+</header>
+
+@code {
+    [Parameter, EditorRequired]
+    public int Count { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback OnClear { get; set; }
+}
