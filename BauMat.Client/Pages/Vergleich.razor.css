@@ -35,16 +35,25 @@
     gap: 1.5rem;
 }
 
+/* ── Content row (table + add panel) ──────────────────── */
+
+.comparison-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
 /* ── Table ───────────────────────────────────────────── */
 
 .comparison-table-wrapper {
     overflow: auto;
     max-height: 70vh;
+    max-width: 100%;
     border: 1px solid var(--color-border-strong);
 }
 
 .comparison-table {
-    width: 100%;
+    width: auto;
     min-width: 720px;
     border-collapse: separate;
     border-spacing: 0;
@@ -150,16 +159,11 @@
     outline-offset: 2px;
 }
 
-/* ── Add-material column (CL-04) ─────────────────────── */
+/* ── Add-material panel (CL-04) ───────────────────────── */
 
-.comparison-add-head {
-    position: static;
-    background: var(--color-surface);
-    color: var(--color-text);
-    vertical-align: middle;
-    text-align: center;
-    min-width: 160px;
-    border-left: 1px solid var(--color-border);
+.comparison-add-panel {
+    flex-shrink: 0;
+    padding-top: calc(0.9rem + 1px);
 }
 
 .comparison-add-btn {
