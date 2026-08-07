@@ -9,20 +9,20 @@
 
 .md-back {
     align-self: flex-start;
-    color: #6b7280;
+    color: var(--color-text-muted);
     text-decoration: none;
     font-size: 0.875rem;
 }
 
     .md-back:hover {
-        color: #111827;
+        color: var(--color-text);
         text-decoration: underline;
     }
 
 /* ── Header ──────────────────────────────────────────── */
 
 .md-header {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-border);
     padding-bottom: 0.75rem;
     display: flex;
     justify-content: space-between;
@@ -37,7 +37,7 @@
 
 .md-eyebrow {
     font-size: 0.75rem;
-    color: #6b7280;
+    color: var(--color-text-muted);
     margin: 0 0 0.25rem 0;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -46,14 +46,14 @@
 .md-title {
     font-size: 1.75rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--color-text);
     margin: 0;
 }
 
 /* ── Description ─────────────────────────────────────── */
 
 .md-description {
-    color: #374151;
+    color: var(--color-text-secondary);
     line-height: 1.5;
 }
 
@@ -65,8 +65,8 @@
 
 .md-section-title {
     font-size: 0.875rem;
-    font-weight: 600;
-    color: #111827;
+    font-weight: 700;
+    color: var(--color-text);
     margin: 0 0 0.5rem 0;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -75,7 +75,7 @@
 /* ── Parameter table ─────────────────────────────────── */
 
 .md-table-wrap {
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
 }
 
 .md-table {
@@ -85,12 +85,12 @@
 }
 
     .md-table thead th {
-        background: #f9fafb;
+        background: var(--color-surface-sunken);
         text-align: left;
         padding: 0.5rem 0.875rem;
         font-weight: 600;
-        color: #374151;
-        border-bottom: 1px solid #e5e7eb;
+        color: var(--color-text-secondary);
+        border-bottom: 1px solid var(--color-border);
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -98,8 +98,8 @@
 
     .md-table tbody td {
         padding: 0.625rem 0.875rem;
-        border-bottom: 1px solid #f3f4f6;
-        color: #1f2937;
+        border-bottom: 1px solid var(--color-border-hairline);
+        color: var(--color-text-secondary);
         vertical-align: middle;
     }
 
@@ -108,17 +108,19 @@
     }
 
 .md-cell-param {
-    font-weight: 500;
-    color: #111827;
+    font-weight: 400;
+    color: var(--color-text-muted);
 }
 
 .md-cell-wert {
     text-align: right;
     font-variant-numeric: tabular-nums;
+    color: var(--color-text);
+    font-weight: 600;
 }
 
 .md-cell-einheit {
-    color: #6b7280;
+    color: var(--color-text-faint);
 }
 
 .md-table th.md-col-wert {
@@ -136,16 +138,16 @@
 
 .md-info-block p {
     margin: 0.25rem 0 0 0;
-    color: #374151;
+    color: var(--color-text-secondary);
     line-height: 1.5;
 }
 
 /* ── Print button ────────────────────────────────────── */
 
 .md-print {
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    color: #374151;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
     padding: 0.4rem 0.875rem;
     font-size: 0.8125rem;
     cursor: pointer;
@@ -154,6 +156,6 @@
 }
 
     .md-print:hover {
-        border-color: #6b7280;
-        color: #111827;
+        border-color: var(--color-text-muted);
+        color: var(--color-text);
     }

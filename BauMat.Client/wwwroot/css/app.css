@@ -1,3 +1,53 @@
+/* ── Colour tokens (CC-01) ───────────────────────────── */
+/* Roles, not elements: every scoped .razor.css consumes these instead of
+   hard-coded hex, so a colour keeps one meaning across MaterialList, the
+   comparison table/cards and the material detail view. */
+
+:root {
+    /* Page & card surfaces */
+    --color-page-bg: #f9fafb;
+    --color-surface: #ffffff;
+    --color-surface-sunken: #f3f4f6;
+
+    /* Structural chrome (segmented-control convention, e.g. active toggle/filter chip) */
+    --color-structural-bg: #111827;
+    --color-structural-text: #ffffff;
+
+    /* Body text */
+    --color-text: #111827;
+    --color-text-secondary: #374151;
+    --color-text-muted: #6b7280;
+    --color-text-faint: #9ca3af;
+
+    /* Borders */
+    --color-border: #e5e7eb;
+    --color-border-strong: #d1d5db;
+    --color-border-hairline: #f3f4f6;
+
+    /* Primary action */
+    --color-accent: #15803d;
+    --color-accent-hover: #166534;
+    --color-accent-contrast: #ffffff;
+
+    /* Selected state (tint of the accent hue) */
+    --color-selected-bg: #f0fdf4;
+    --color-selected-bg-hover: #dcfce7;
+    --color-selected-border: #bbf7d0;
+    --color-selected-border-hover: #86efac;
+
+    /* Destructive action */
+    --color-danger: #b91c1c;
+    --color-danger-hover: #991b1b;
+    --color-danger-contrast: #ffffff;
+
+    /* Focus */
+    --color-focus-ring: #111827;
+    --color-focus-ring-on-dark: #ffffff;
+
+    /* Shadow */
+    --shadow-card: 0 1px 3px rgba(17, 24, 39, 0.06);
+}
+
 /* ── Global base ─────────────────────────────────────── */
 
 *, *::before, *::after {

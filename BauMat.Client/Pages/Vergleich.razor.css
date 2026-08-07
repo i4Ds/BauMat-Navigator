@@ -2,13 +2,13 @@
 
 .comparison-empty {
     padding: 3rem 0;
-    color: #6b7280;
+    color: var(--color-text-muted);
 }
 
     .comparison-empty h1 {
         font-size: 2rem;
         font-weight: 700;
-        color: #111827;
+        color: var(--color-text);
         margin: 0 0 0.5rem 0;
         letter-spacing: -0.02em;
     }
@@ -18,7 +18,7 @@
     }
 
     .comparison-empty a {
-        color: #16a34a;
+        color: var(--color-accent);
         font-weight: 600;
         text-decoration: none;
     }
@@ -44,28 +44,28 @@
 
 .comparison-back {
     display: inline-block;
-    color: #6b7280;
+    color: var(--color-text-muted);
     text-decoration: none;
     font-size: 0.875rem;
     margin-bottom: 0.5rem;
 }
 
     .comparison-back:hover {
-        color: #111827;
+        color: var(--color-text);
         text-decoration: underline;
     }
 
 .comparison-header h1 {
     font-size: 2rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--color-text);
     margin: 0;
     letter-spacing: -0.02em;
 }
 
 .comparison-header p {
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--color-text-muted);
     margin: 0.25rem 0 0 0;
 }
 
@@ -73,9 +73,9 @@
 
 .comparison-clear {
     flex-shrink: 0;
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    color: #374151;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
     padding: 0.5rem 1rem;
     font-size: 0.8125rem;
     font-weight: 500;
@@ -87,53 +87,79 @@
 }
 
     .comparison-clear:hover {
-        background: #f9fafb;
-        border-color: #9ca3af;
-        color: #111827;
+        background: var(--color-page-bg);
+        border-color: var(--color-text-muted);
+        color: var(--color-text);
     }
 
     .comparison-clear:focus-visible {
-        outline: 2px solid #111827;
+        outline: 2px solid var(--color-focus-ring);
         outline-offset: 2px;
     }
 
 /* ── Table ───────────────────────────────────────────── */
 
 .comparison-table-wrapper {
-    overflow-x: auto;
-    border: 1px solid #e5e7eb;
+    overflow: auto;
+    max-height: 70vh;
+    border: 1px solid var(--color-border-strong);
 }
 
 .comparison-table {
     width: 100%;
     min-width: 720px;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     font-size: 0.875rem;
 }
 
 .comparison-table th,
 .comparison-table td {
     padding: 0.9rem 1rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid var(--color-border-hairline);
     text-align: left;
     vertical-align: top;
 }
 
+/* ── Header row + parameter column ────────────────────── */
+/* Two distinct light tones (not a shared dark fill) keep the header band
+   and the label column from merging into one block (CC-02 / problem 3). */
+
 .comparison-table thead th {
-    background: #f9fafb;
-    font-weight: 600;
-    color: #6b7280;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--color-surface-sunken);
+    color: var(--color-text-secondary);
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700;
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-bottom: 1px solid #e5e7eb;
+    border-radius: 0;
+    border-bottom: 2px solid var(--color-border-strong);
+}
+
+.comparison-table thead th:first-child {
+    left: 0;
+    z-index: 3;
+}
+
+.comparison-param-head {
+    color: var(--color-text-muted);
 }
 
 .comparison-table tbody th {
-    background: #f9fafb;
-    font-weight: 500;
-    color: #111827;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 600;
     white-space: nowrap;
+    border-radius: 0;
+    border-right: 1px solid var(--color-border);
 }
 
 .comparison-table tbody tr:last-child td,
@@ -143,7 +169,12 @@
 
 .comparison-table td,
 .comparison-table thead th:not(:first-child) {
-    border-left: 1px solid #e5e7eb;
+    border-left: 1px solid var(--color-border);
+}
+
+.comparison-value {
+    color: var(--color-text);
+    font-weight: 600;
 }
 
 .comparison-col-head {
@@ -161,7 +192,7 @@
     flex-shrink: 0;
     background: none;
     border: none;
-    color: #ef4444;
+    color: var(--color-text-muted);
     cursor: pointer;
     font-size: 1.1rem;
     line-height: 1;
@@ -171,23 +202,58 @@
     margin-top: -0.1rem;
 }
 
-.comparison-col-remove:hover {
-    color: #dc2626;
+.comparison-col-remove:hover,
+.comparison-col-remove:focus-visible {
+    color: var(--color-danger);
 }
 
 .comparison-col-remove:focus-visible {
-    outline: 2px solid #111827;
+    outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
 }
 
-.comparison-view-toggle {
-    display: inline-block;
-    font-size: 0.875rem;
+/* ── Add-material column (CL-04) ─────────────────────── */
+
+.comparison-add-head {
+    position: static;
+    background: var(--color-surface);
+    color: var(--color-text);
+    vertical-align: middle;
+    text-align: center;
+    min-width: 160px;
+    border-left: 1px solid var(--color-border);
+}
+
+.comparison-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: #16a34a;
+    color: var(--color-accent-contrast);
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: 6px;
     text-decoration: none;
 }
 
-.comparison-view-toggle:hover {
-    text-decoration: underline;
+.comparison-add-btn:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    text-decoration: none;
+}
+
+.comparison-add-btn:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+}
+
+.comparison-add-limit {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-faint);
+    text-transform: none;
+    letter-spacing: normal;
 }

@@ -30,13 +30,13 @@ else
             </button>
         </header>
 
-        <a class="comparison-view-toggle" href="vergleich2">Kartenansicht →</a>
+        <ViewToggle Active="table" />
 
         <div class="comparison-table-wrapper">
             <table class="comparison-table">
                 <thead>
                     <tr>
-                        <th scope="col">Parameter</th>
+                        <th scope="col" class="comparison-param-head">Parameter</th>
 
                         @foreach (var material in ComparedMaterials)
                         {
@@ -45,6 +45,7 @@ else
                                     <span class="comparison-col-name">@material.Name</span>
                                     <button class="comparison-col-remove"
                                             title="Aus Vergleich entfernen"
+                                            aria-label="@($"{material.Name} aus Vergleich entfernen")"
                                             @onclick="() => RemoveFromCompare(material.Id)"
                                             @onclick:stopPropagation="true">
                                         ×
@@ -52,54 +53,36 @@ else
                                 </div>
                             </th>
                         }
+
+                        <th scope="col" class="comparison-add-head" rowspan="@(Parameters.Length + 1)">
+                            @if (!CompareState.IsFull)
+                            {
+                                <a class="comparison-add-btn" href="@AddMaterialHref">
+                                    + Material hinzufügen
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="comparison-add-limit" title="Maximal @CompareState.MaxCount Materialien im Vergleich">
+                                    Maximum erreicht
+                                </span>
+                            }
+                        </th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <th scope="row">Konstruktionstyp</th>
+                    @foreach (var (label, value) in Parameters)
+                    {
+                        <tr>
+                            <th scope="row">@label</th>
 
-                        @foreach (var material in ComparedMaterials)
-                        {
-                            <td>@material.ConstructionType</td>
-                        }
-                    </tr>
-
-                    <tr>
-                        <th scope="row">PET Tag</th>
-
-                        @foreach (var material in ComparedMaterials)
-                        {
-                            <td>@($"{material.PetTag:0.0} °C")</td>
-                        }
-                    </tr>
-
-                    <tr>
-                        <th scope="row">Albedo</th>
-
-                        @foreach (var material in ComparedMaterials)
-                        {
-                            <td>@material.Albedo.ToString("0.00")</td>
-                        }
-                    </tr>
-
-                    <tr>
-                        <th scope="row">Lebensdauer</th>
-
-                        @foreach (var material in ComparedMaterials)
-                        {
-                            <td>@($"{material.Lifespan} Jahre")</td>
-                        }
-                    </tr>
-
-                    <tr>
-                        <th scope="row">THG</th>
-
-                        @foreach (var material in ComparedMaterials)
-                        {
-                            <td>@($"{material.Ghg:0.#} kg CO₂-eq/m²")</td>
-                        }
-                    </tr>
+                            @foreach (var material in ComparedMaterials)
+                            {
+                                <td class="comparison-value">@value(material)</td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
@@ -114,6 +97,17 @@ else
         MaterialService.All
             .Where(material => CompareState.Contains(material.Id))
             .ToList();
+
+    private static readonly (string Label, Func<Material, string> Value)[] Parameters =
+    {
+        ("Konstruktionstyp", m => m.ConstructionType),
+        ("PET Tag", m => $"{m.PetTag:0.0} °C"),
+        ("Albedo", m => m.Albedo.ToString("0.00")),
+        ("Lebensdauer", m => $"{m.Lifespan} Jahre"),
+        ("THG", m => $"{m.Ghg:0.#} kg CO₂-eq/m²"),
+    };
+
+    private const string AddMaterialHref = "katalog?returnTo=vergleich&view=table";
 
     protected override void OnInitialized()
     {

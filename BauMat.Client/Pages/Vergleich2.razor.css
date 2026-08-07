@@ -2,13 +2,13 @@
 
 .v2-empty-state {
     padding: 3rem 0;
-    color: #6b7280;
+    color: var(--color-text-muted);
 }
 
     .v2-empty-state h1 {
         font-size: 2rem;
         font-weight: 700;
-        color: #111827;
+        color: var(--color-text);
         margin: 0 0 0.5rem 0;
         letter-spacing: -0.02em;
     }
@@ -18,7 +18,7 @@
     }
 
     .v2-empty-state a {
-        color: #16a34a;
+        color: var(--color-accent);
         font-weight: 600;
         text-decoration: none;
     }
@@ -50,19 +50,63 @@
 
 .v2-ref-card {
     width: 100%;
-    background: #ffffff;
-    border: 1px solid #d1d5db;
+    background: var(--color-surface-sunken);
+    border: 1px solid var(--color-border-strong);
     border-radius: 12px;
     padding: 1.75rem;
-    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.06);
+    box-shadow: var(--shadow-card);
+}
+
+.v2-ref-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.v2-ref-badge {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.2rem;
 }
 
     .v2-ref-card .v2-card-name {
         font-size: 1.375rem;
         font-weight: 700;
-        color: #111827;
-        margin: 0 0 1.25rem 0;
+        color: var(--color-text);
+        margin: 0;
         letter-spacing: -0.01em;
+    }
+
+.v2-swap-button {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-accent-contrast);
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+    .v2-swap-button:hover {
+        background: var(--color-accent-hover);
+        border-color: var(--color-accent-hover);
+        text-decoration: none;
+    }
+
+    .v2-swap-button:focus-visible {
+        outline: 2px solid var(--color-focus-ring);
+        outline-offset: 2px;
     }
 
 /* ── Compare section ──────────────────────────────────── */
@@ -74,12 +118,12 @@
 
 .v2-hint {
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--color-text-muted);
     margin: 0;
 }
 
     .v2-hint a {
-        color: #16a34a;
+        color: var(--color-accent);
         font-weight: 600;
         text-decoration: none;
     }
@@ -95,8 +139,8 @@
 }
 
 .v2-compare-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: 10px;
     padding: 1.25rem;
 }
@@ -112,14 +156,14 @@
 .v2-compare-card .v2-card-name {
     font-size: 0.9375rem;
     font-weight: 600;
-    color: #111827;
+    color: var(--color-text);
 }
 
 .v2-remove-button {
     flex-shrink: 0;
     background: none;
     border: none;
-    color: #ef4444;
+    color: var(--color-text-muted);
     cursor: pointer;
     font-size: 1.1rem;
     line-height: 1;
@@ -129,12 +173,13 @@
     margin-top: -0.1rem;
 }
 
-    .v2-remove-button:hover {
-        color: #dc2626;
+    .v2-remove-button:hover,
+    .v2-remove-button:focus-visible {
+        color: var(--color-danger);
     }
 
     .v2-remove-button:focus-visible {
-        outline: 2px solid #111827;
+        outline: 2px solid var(--color-focus-ring);
         outline-offset: 2px;
     }
 
@@ -153,7 +198,7 @@
     align-items: baseline;
     gap: 1rem;
     padding-bottom: 0.6rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid var(--color-border-hairline);
 }
 
     .v2-parameter-row:last-child {
@@ -164,7 +209,7 @@
 .v2-parameter-label {
     font-size: 0.75rem;
     font-weight: 600;
-    color: #6b7280;
+    color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     white-space: nowrap;
@@ -172,32 +217,8 @@
 
 .v2-parameter-value {
     font-size: 0.875rem;
-    font-weight: 500;
-    color: #111827;
+    font-weight: 600;
+    color: var(--color-text);
     text-align: right;
     margin: 0;
-}
-
-/* ── Responsive ────────────────────────────────────────── */
-
-@media (max-width: 880px) {
-    .v2-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .v2-compare-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.v2-view-toggle {
-    display: inline-block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #16a34a;
-    text-decoration: none;
-}
-
-.v2-view-toggle:hover {
-    text-decoration: underline;
 }

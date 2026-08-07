@@ -16,12 +16,22 @@
 else
 {
     <section class="v2-page">
-        <a class="v2-view-toggle" href="vergleich">Tabellenansicht →</a>
+        <ViewToggle Active="cards" />
 
         <div class="v2-layout">
             <div class="v2-reference">
                 <article class="v2-ref-card">
-                    <h2 class="v2-card-name">@ReferenceMaterial!.Name</h2>
+                    <div class="v2-ref-header">
+                        <div>
+                            <span class="v2-ref-badge">Referenz</span>
+                            <h2 class="v2-card-name">@ReferenceMaterial!.Name</h2>
+                        </div>
+                        <a class="v2-swap-button"
+                           href="katalog?returnTo=vergleich&view=cards&slot=reference"
+                           aria-label="@($"Referenzmaterial {ReferenceMaterial.Name} austauschen")">
+                            ⇄ Tauschen
+                        </a>
+                    </div>
 
                     <dl class="v2-parameter-list">
                         <div class="v2-parameter-row">
@@ -104,15 +114,21 @@ else
 }
 
 @code {
+    // Insertion order (not Id order) so the reference defaults to "the first
+    // material added" (CL-05) and stays stable as candidates are added or
+    // removed.
     private IReadOnlyList<Material> SelectedMaterials =>
-        MaterialService.All
-            .Where(material => CompareState.Contains(material.Id))
-            .OrderBy(material => material.Id)
+        CompareState.Ids
+            .Select(id => MaterialService.GetById(id))
+            .Where(material => material is not null)
+            .Select(material => material!)
             .ToList();
 
-    private Material? ReferenceMaterial => SelectedMaterials.Count > 0 ? SelectedMaterials[0] : null;
+    private Material? ReferenceMaterial =>
+        CompareState.ReferenceId is int id ? MaterialService.GetById(id) : null;
 
-    private IReadOnlyList<Material> ComparisonMaterials => SelectedMaterials.Skip(1).ToList();
+    private IReadOnlyList<Material> ComparisonMaterials =>
+        SelectedMaterials.Where(material => material.Id != ReferenceMaterial?.Id).ToList();
 
     protected override void OnInitialized()
     {

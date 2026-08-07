@@ -8,11 +8,21 @@
 
 <div class="ml-page">
 
+    @if (IsReturnContext)
+    {
+        <div class="ml-return-banner">
+            <span class="ml-return-text">
+                @(IsReferenceSlot ? "Neues Referenzmaterial auswählen" : "Material zum Vergleich hinzufügen")
+            </span>
+            <a class="ml-return-link" href="@ReturnHref">← Zurück zum Vergleich</a>
+        </div>
+    }
+
     <header class="ml-header">
         <h1 class="ml-title">@PageHeading</h1>
         <p class="ml-subtitle">@FilterStatus@(CompareState.Count > 0 ? $" · {CompareState.Count} im Vergleich" : "")</p>
 
-        @if (CompareState.Count > 0)
+        @if (CompareState.Count > 0 && !IsReturnContext)
         {
             <a class="ml-compare-nav" href="vergleich">
                 Vergleich anzeigen (@CompareState.Count) →
@@ -130,13 +140,33 @@
                             <td class="ml-cell-num">@m.Lifespan</td>
                             <td class="ml-cell-num">@m.Ghg.ToString("0")</td>
                             <td class="ml-cell-action">
-                                <button class="ml-compare-btn @(CompareState.Contains(m.Id) ? "compared" : "")"
-                                        type="button"
-                                        @onclick="() => CompareState.Toggle(m.Id)"
-                                        @onclick:stopPropagation="true"
-                                        @onkeydown:stopPropagation="true">
-                                    @(CompareState.Contains(m.Id) ? "✓ Im Vergleich" : "+ Vergleichen")
-                                </button>
+                                @if (IsReferenceSlot)
+                                {
+                                    var isCurrentReference = CompareState.ReferenceId == m.Id;
+                                    var isAtLimit = !CompareState.Contains(m.Id) && CompareState.IsFull;
+                                    <button class="ml-compare-btn @(isCurrentReference ? "compared" : "")"
+                                            type="button"
+                                            disabled="@(isCurrentReference || isAtLimit)"
+                                            title="@(isAtLimit ? $"Maximal {CompareState.MaxCount} Materialien im Vergleich" : null)"
+                                            @onclick="() => SelectReference(m.Id)"
+                                            @onclick:stopPropagation="true"
+                                            @onkeydown:stopPropagation="true">
+                                        @(isCurrentReference ? "✓ Aktuelle Referenz" : "Als Referenz wählen")
+                                    </button>
+                                }
+                                else
+                                {
+                                    var isAtLimit = !CompareState.Contains(m.Id) && CompareState.IsFull;
+                                    <button class="ml-compare-btn @(CompareState.Contains(m.Id) ? "compared" : "")"
+                                            type="button"
+                                            disabled="@isAtLimit"
+                                            title="@(isAtLimit ? $"Maximal {CompareState.MaxCount} Materialien im Vergleich" : null)"
+                                            @onclick="() => CompareState.Toggle(m.Id)"
+                                            @onclick:stopPropagation="true"
+                                            @onkeydown:stopPropagation="true">
+                                        @(CompareState.Contains(m.Id) ? "✓ Im Vergleich" : "+ Vergleichen")
+                                    </button>
+                                }
                             </td>
                         </tr>
                     }
@@ -160,6 +190,36 @@
 
     // Category from the route (/katalog or /katalog/{category}).
     [Parameter] public string Category { get; set; } = "";
+
+    // ── Return context (CL-04 / CL-07) ───────────────────────────────────
+    //
+    // The comparison views link here with ?returnTo=vergleich&view=table|cards
+    // (optionally &slot=reference for a reference-material swap) so the
+    // catalog can send the user straight back to where they came from.
+
+    [SupplyParameterFromQuery(Name = "returnTo")]
+    [Parameter]
+    public string? ReturnTo { get; set; }
+
+    [SupplyParameterFromQuery(Name = "view")]
+    [Parameter]
+    public string? View { get; set; }
+
+    [SupplyParameterFromQuery(Name = "slot")]
+    [Parameter]
+    public string? Slot { get; set; }
+
+    private bool IsReturnContext => ReturnTo == "vergleich";
+
+    private bool IsReferenceSlot => Slot == "reference";
+
+    private string ReturnHref => View == "cards" ? "vergleich2" : "vergleich";
+
+    private void SelectReference(int id)
+    {
+        CompareState.SetReference(id);
+        Navigation.NavigateTo("vergleich2");
+    }
 
     private string PageHeading => string.IsNullOrEmpty(Category) ? "Katalog" : $"Katalog: {Category}";
 
