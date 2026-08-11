@@ -140,7 +140,19 @@
     // Category from the route (/katalog or /katalog/{category}).
     [Parameter] public string Category { get; set; } = "";
 
+    private static readonly string[] KnownCategories =
+        { "fassaden", "boeden", "daecher" };
+
     private string PageHeading => string.IsNullOrEmpty(Category) ? "Katalog" : $"Katalog: {Category}";
+
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrEmpty(Category)
+            && !KnownCategories.Contains(Category, StringComparer.OrdinalIgnoreCase))
+        {
+            Navigation.NotFound();
+        }
+    }
 
     // ── Mock data ──────────────────────────────────────────────────────────
     // Inline data for the prototype. Real data from the PDF catalog is built
