@@ -138,7 +138,7 @@
     // Catalog list view of a material category (Issue #3).
 
     // Category from the route (/katalog or /katalog/{category}).
-    [Parameter] public string Category { get; set; } = "";
+    [Parameter] public string? Category { get; set; }
 
     private static readonly string[] KnownCategories =
         { "fassaden", "boeden", "daecher" };
@@ -147,6 +147,15 @@
 
     protected override void OnParametersSet()
     {
+        // The "/katalog" route doesn't include {category}, so Blazor leaves
+        // the parameter at its previous value when navigating back from a
+        // category page to the plain catalog route on the same component.
+        var path = Navigation.ToBaseRelativePath(Navigation.Uri).Split('?', '#')[0].TrimEnd('/');
+        if (path.Equals("katalog", StringComparison.OrdinalIgnoreCase))
+        {
+            Category = null;
+        }
+
         if (!string.IsNullOrEmpty(Category)
             && !KnownCategories.Contains(Category, StringComparer.OrdinalIgnoreCase))
         {
