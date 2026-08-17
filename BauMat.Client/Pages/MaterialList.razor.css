@@ -54,7 +54,7 @@
         outline-offset: 2px;
     }
 
-/* ── Return-to-comparison action (CL-04 / CL-07) ──────── */
+/* ── Return-to-comparison action ──────────────────────── */
 
 .ml-return-action {
     display: flex;

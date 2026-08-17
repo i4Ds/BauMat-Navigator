@@ -41,7 +41,7 @@
 
 /* ── Header row + parameter column ────────────────────── */
 /* Two distinct light tones (not a shared dark fill) keep the header band
-   and the label column from merging into one block (CC-02 / problem 3). */
+   and the label column from merging into one block. */
 
 .comparison-table thead th {
     position: sticky;
@@ -130,7 +130,7 @@
     outline-offset: 2px;
 }
 
-/* ── Add-material panel (CL-04) ───────────────────────── */
+/* ── Add-material panel ────────────────────────────────── */
 
 .comparison-add-panel {
     flex-shrink: 0;

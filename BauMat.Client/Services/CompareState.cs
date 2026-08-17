@@ -10,7 +10,7 @@ public sealed class CompareState
     public const int MaxCount = 6;
 
     // Insertion order, not a HashSet, so the card view can default the
-    // reference material to "the first one added" (CL-05).
+    // reference material to "the first one added".
     private readonly List<int> _order = new();
     private readonly ReadOnlyCollection<int> _ids;
     private int? _referenceId;
@@ -60,7 +60,7 @@ public sealed class CompareState
         NotifyChanged();
     }
 
-    // CL-07: replaces the reference material rather than removing it. If the
+    // Replaces the reference material rather than removing it. If the
     // chosen material is already a candidate it simply becomes the
     // reference; if it isn't in the list yet it is added.
     public void SetReference(int id)

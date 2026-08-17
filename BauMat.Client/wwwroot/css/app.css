@@ -1,7 +1,7 @@
-/* ── Colour tokens (CC-01) ───────────────────────────── */
-/* Roles, not elements: every scoped .razor.css consumes these instead of
-   hard-coded hex, so a colour keeps one meaning across MaterialList, the
-   comparison table/cards and the material detail view. */
+/* ── Colour tokens ───────────────────────────────────── */
+/* Roles, not elements: scoped .razor.css files are expected to consume
+   these instead of hard-coded hex, so a colour keeps one meaning across
+   MaterialList, the comparison table/cards and the material detail view. */
 
 :root {
     /* Page & card surfaces */
