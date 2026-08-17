@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace BauMat.Client.Services;
 
 public sealed class CompareState
@@ -10,9 +12,18 @@ public sealed class CompareState
     // Insertion order, not a HashSet, so the card view can default the
     // reference material to "the first one added" (CL-05).
     private readonly List<int> _order = new();
+    private readonly ReadOnlyCollection<int> _ids;
     private int? _referenceId;
 
-    public IReadOnlyList<int> Ids => _order;
+    public CompareState()
+    {
+        _ids = _order.AsReadOnly();
+    }
+
+    // A live view over _order (not a copy), wrapped once so callers can't
+    // cast back to List<int> and mutate state without going through Toggle/
+    // SetReference/Clear and triggering OnChanged.
+    public IReadOnlyList<int> Ids => _ids;
 
     public int Count => _order.Count;
 
