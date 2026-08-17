@@ -7,7 +7,6 @@ if (args.Length < 2)
     return;
 }
 
-
 var inputFile = args[0];
 var outputFile = args[1];
 
@@ -29,7 +28,6 @@ if (!workbook.Worksheets.TryGetWorksheet("Daten_alle", out var worksheet))
 
 Console.WriteLine("Worksheet 'Daten_alle' found.");
 
-
 var firstMaterialColumn = 4;
 var lastUsedColumn = worksheet.LastColumnUsed();
 
@@ -43,32 +41,42 @@ var lastUsedColumnNumber = lastUsedColumn.ColumnNumber();
 
 var materials = new List<Material>();
 
+var firstMetricRow = 4;
+
 for (var column = firstMaterialColumn; column <= lastUsedColumnNumber; column++)
 {
     var materialId = worksheet.Cell(2, column).GetString().Trim();
+    var materialName = worksheet.Cell(3, column).GetString().Trim();
 
     if (string.IsNullOrWhiteSpace(materialId))
     {
         break;
     }
 
-    var materialName = worksheet.Cell(3, column).GetString().Trim();
-    
     var metrics = new List<Metric>();
 
-    var metricName = worksheet.Cell(4, 1).GetString().Trim();
-    var metricSymbol = worksheet.Cell(4, 2).GetString().Trim();
-    var metricUnit = worksheet.Cell(4, 3).GetString().Trim();
-    var metricValue = worksheet.Cell(4, column).GetString().Trim();
-    
-    var metric = new Metric(
+    for (var row = firstMetricRow; ; row++)
+    {
+        var metricName = worksheet.Cell(row, 1).GetString().Trim();
+        var metricSymbol = worksheet.Cell(row, 2).GetString().Trim();
+        var metricUnit = worksheet.Cell(row, 3).GetString().Trim();
+        
+        if (string.IsNullOrWhiteSpace(metricName) && string.IsNullOrWhiteSpace(metricSymbol) && string.IsNullOrWhiteSpace(metricUnit))
+        {
+            break;
+        }
+
+        var metricValue = worksheet.Cell(row, column).GetString().Trim();
+
+        var metric = new Metric(
         metricName,
         metricSymbol,
         metricUnit,
         metricValue
-    );
+        );
 
-    metrics.Add(metric);
+        metrics.Add(metric);
+    }
 
     var material = new Material(
         materialId,
