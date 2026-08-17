@@ -7,6 +7,7 @@ if (args.Length < 2)
     return;
 }
 
+
 var inputFile = args[0];
 var outputFile = args[1];
 
@@ -18,6 +19,7 @@ if (!File.Exists(inputFile))
 
 Console.WriteLine("Excel File opened successfully.");
 
+
 using var workbook = new XLWorkbook(inputFile);
 
 if (!workbook.Worksheets.TryGetWorksheet("Daten_alle", out var worksheet))
@@ -27,6 +29,7 @@ if (!workbook.Worksheets.TryGetWorksheet("Daten_alle", out var worksheet))
 }
 
 Console.WriteLine("Worksheet 'Daten_alle' found.");
+
 
 var firstMaterialColumn = 4;
 var lastUsedColumn = worksheet.LastColumnUsed();
@@ -51,9 +54,13 @@ for (var column = firstMaterialColumn; column <= lastUsedColumnNumber; column++)
     }
 
     var materialName = worksheet.Cell(3, column).GetString().Trim();
+    var metrics = new List<Metric>();
+    var material = new Material(
+        materialId,
+        materialName,
+        metrics
+    );
 
-    var material = new Material(materialId, materialName);
-    
     materials.Add(material);
 }
 
@@ -65,4 +72,21 @@ foreach (var material in materials)
 Console.WriteLine($"Input File: {inputFile}");
 Console.WriteLine($"Output File: {outputFile}");
 
-public record Material(string Id, string Name);
+var metricName = worksheet.Cell(4, 1).GetString().Trim();
+var metricSymbol = worksheet.Cell(4, 2).GetString().Trim();
+var metricUnit = worksheet.Cell(4, 3).GetString().Trim();
+var metricValue = worksheet.Cell(4, 4).GetString().Trim();
+
+Console.WriteLine($"Metric: {metricName}, Symbol: {metricSymbol}, Unit: {metricUnit}, Value: {metricValue}");
+public record Material(
+    string Id, 
+    string Name,
+    List<Metric> Metrics
+    );
+
+public record Metric(
+    string Name,
+    string Symbol,
+    string Unit,
+    string Value
+    );
