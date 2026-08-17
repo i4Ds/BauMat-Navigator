@@ -84,7 +84,7 @@
 
     protected override void OnParametersSet()
     {
-        Material = MaterialService.GetById(Id);
+        Material = MaterialService.All.SingleOrDefault(m => m.Id == Id);
 
         if (Material is null)
             Navigation.NotFound();

@@ -121,13 +121,15 @@ else
     // removed.
     private IReadOnlyList<Material> SelectedMaterials =>
         CompareState.Ids
-            .Select(id => MaterialService.GetById(id))
+            .Select(id => MaterialService.All.SingleOrDefault(m => m.Id == id))
             .Where(material => material is not null)
             .Select(material => material!)
             .ToList();
 
     private Material? ReferenceMaterial =>
-        CompareState.ReferenceId is int id ? MaterialService.GetById(id) : null;
+        CompareState.ReferenceId is int id
+            ? MaterialService.All.SingleOrDefault(m => m.Id == id)
+            : null;
 
     private IReadOnlyList<Material> ComparisonMaterials =>
         SelectedMaterials.Where(material => material.Id != ReferenceMaterial?.Id).ToList();
