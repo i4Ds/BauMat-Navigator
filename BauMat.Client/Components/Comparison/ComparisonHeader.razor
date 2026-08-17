@@ -2,7 +2,7 @@
     <div>
         <a class="comparison-back" href="katalog">← Zurück zum Katalog</a>
         <h1>Materialvergleich</h1>
-        <p>@Count Materialien im Vergleich</p>
+        <p>@(Count == 1 ? "1 Material im Vergleich" : $"{Count} Materialien im Vergleich")</p>
     </div>
 
     <button type="button"

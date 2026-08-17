@@ -7,11 +7,7 @@
 
 @if (SelectedMaterials.Count == 0)
 {
-    <section class="v2-empty-state">
-        <h1>Materialvergleich</h1>
-        <p>Noch keine Materialien ausgewählt</p>
-        <a href="katalog">← Zum Katalog</a>
-    </section>
+    <ComparisonEmptyState />
 }
 else
 {
@@ -64,7 +60,7 @@ else
                 @if (ComparisonMaterials.Count == 0)
                 {
                     <p class="v2-hint">
-                        <a href="katalog">Weitere Materialien im Katalog auswählen</a>
+                        <a href="katalog">Weitere Materialien im Katalog auswählen →</a>
                     </p>
                 }
                 else

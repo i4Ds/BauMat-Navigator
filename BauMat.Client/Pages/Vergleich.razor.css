@@ -1,32 +1,3 @@
-/* ── Empty state ─────────────────────────────────────── */
-
-.comparison-empty {
-    padding: 3rem 0;
-    color: var(--color-text-muted);
-}
-
-    .comparison-empty h1 {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--color-text);
-        margin: 0 0 0.5rem 0;
-        letter-spacing: -0.02em;
-    }
-
-    .comparison-empty p {
-        margin: 0 0 1rem 0;
-    }
-
-    .comparison-empty a {
-        color: var(--color-accent);
-        font-weight: 600;
-        text-decoration: none;
-    }
-
-        .comparison-empty a:hover {
-            text-decoration: underline;
-        }
-
 /* ── Page layout ─────────────────────────────────────── */
 
 .comparison-page {

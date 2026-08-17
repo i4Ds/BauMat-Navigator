@@ -1,32 +1,3 @@
-/* ── Empty state ─────────────────────────────────────── */
-
-.v2-empty-state {
-    padding: 3rem 0;
-    color: var(--color-text-muted);
-}
-
-    .v2-empty-state h1 {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--color-text);
-        margin: 0 0 0.5rem 0;
-        letter-spacing: -0.02em;
-    }
-
-    .v2-empty-state p {
-        margin: 0 0 1rem 0;
-    }
-
-    .v2-empty-state a {
-        color: var(--color-accent);
-        font-weight: 600;
-        text-decoration: none;
-    }
-
-        .v2-empty-state a:hover {
-            text-decoration: underline;
-        }
-
 /* ── Page layout ─────────────────────────────────────── */
 
 .v2-page {

@@ -251,9 +251,10 @@
         {
             var total = MaterialService.All.Count;
             var shown = FilteredMaterials.Count();
+            var totalLabel = total == 1 ? "Material" : "Materialien";
             return ActiveType == All
-                ? $"{total} Materialien"
-                : $"{shown} von {total} Materialien";
+                ? $"{total} {totalLabel}"
+                : $"{shown} von {total} {totalLabel}";
         }
     }
 
