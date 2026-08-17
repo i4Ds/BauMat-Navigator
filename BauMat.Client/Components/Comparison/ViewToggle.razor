@@ -1,17 +1,17 @@
 <div class="cvt-toggle" role="group" aria-label="Ansicht wählen">
-    <a class="cvt-option @(Active == "table" ? "cvt-active" : "")"
-       href="vergleich"
-       aria-current="@(Active == "table" ? "page" : null)">
+    <a class="cvt-option @(Active == ComparisonView.Table ? "cvt-active" : "")"
+       href="@ComparisonView.Table.Href()"
+       aria-current="@(Active == ComparisonView.Table ? "page" : null)">
         Tabelle
     </a>
-    <a class="cvt-option @(Active == "cards" ? "cvt-active" : "")"
-       href="vergleich2"
-       aria-current="@(Active == "cards" ? "page" : null)">
+    <a class="cvt-option @(Active == ComparisonView.Cards ? "cvt-active" : "")"
+       href="@ComparisonView.Cards.Href()"
+       aria-current="@(Active == ComparisonView.Cards ? "page" : null)">
         Karten
     </a>
 </div>
 
 @code {
     [Parameter, EditorRequired]
-    public string Active { get; set; } = "table";
+    public ComparisonView Active { get; set; }
 }
