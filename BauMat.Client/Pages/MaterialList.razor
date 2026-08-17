@@ -8,25 +8,27 @@
 
 <div class="ml-page">
 
-    @if (IsReturnContext)
-    {
-        <div class="ml-return-banner">
-            <span class="ml-return-text">
-                @(IsReferenceSlot ? "Neues Referenzmaterial auswählen" : "Material zum Vergleich hinzufügen")
-            </span>
-            <a class="ml-return-link" href="@ReturnHref">← Zurück zum Vergleich</a>
-        </div>
-    }
-
     <header class="ml-header">
-        <h1 class="ml-title">@PageHeading</h1>
-        <p class="ml-subtitle">@FilterStatus@(CompareState.Count > 0 ? $" · {CompareState.Count} im Vergleich" : "")</p>
+        <div class="ml-header-main">
+            <h1 class="ml-title">@PageHeading</h1>
+            <p class="ml-subtitle">@FilterStatus@(CompareState.Count > 0 ? $" · {CompareState.Count} im Vergleich" : "")</p>
 
-        @if (CompareState.Count > 0 && !IsReturnContext)
+            @if (CompareState.Count > 0 && !IsReturnContext)
+            {
+                <a class="ml-compare-nav" href="vergleich">
+                    Vergleich anzeigen (@CompareState.Count) →
+                </a>
+            }
+        </div>
+
+        @if (IsReturnContext)
         {
-            <a class="ml-compare-nav" href="vergleich">
-                Vergleich anzeigen (@CompareState.Count) →
-            </a>
+            <div class="ml-return-action">
+                <a class="ml-return-btn" href="@ReturnHref">← Zurück zum Vergleich</a>
+                <span class="ml-return-hint">
+                    @(IsReferenceSlot ? "Neues Referenzmaterial auswählen" : "Material zum Vergleich hinzufügen")
+                </span>
+            </div>
         }
     </header>
 
