@@ -60,7 +60,7 @@ for (var column = firstMaterialColumn; column <= lastUsedColumnNumber; column++)
         var metricName = worksheet.Cell(row, 1).GetString().Trim();
         var metricSymbol = worksheet.Cell(row, 2).GetString().Trim();
         var metricUnit = worksheet.Cell(row, 3).GetString().Trim();
-        
+
         if (string.IsNullOrWhiteSpace(metricName) && string.IsNullOrWhiteSpace(metricSymbol) && string.IsNullOrWhiteSpace(metricUnit))
         {
             break;
@@ -101,14 +101,26 @@ Console.WriteLine($"Input File: {inputFile}");
 Console.WriteLine($"Output File: {outputFile}");
 
 public record Material(
-    string Id, 
+
+    string Id,
     string Name,
     List<Metric> Metrics
-    );
+);
 
 public record Metric(
+    string Id,
     string Name,
-    string Symbol,
-    string Unit,
-    string Value
-    );
+    string? Symbol,
+    string? Unit,
+    double? NumericValue,
+    string? TextValue,
+    string? RawValue,
+    string? Remark,
+    string? Link,
+    List<Reference> References
+);
+
+public record Reference(
+    string? Key,
+    string? Citation
+);
