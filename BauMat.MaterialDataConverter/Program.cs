@@ -66,16 +66,38 @@ for (var column = firstMaterialColumn; column <= lastUsedColumnNumber; column++)
             break;
         }
 
-        var metricValue = worksheet.Cell(row, column).GetString().Trim();
+        var cell = worksheet.Cell(row, column);
+
+        var rawValue = cell.GetString().Trim();
+
+        double? numericValue = null;
+        string? textValue = null;
+
+        if (cell.DataType == XLDataType.Number)
+        { 
+            numericValue = cell.GetDouble();
+
+        }    
+
+        else if (!string.IsNullOrWhiteSpace(rawValue) && !IsMissingValue(rawValue))
+        {
+            textValue = rawValue;
+        }
 
         var metric = new Metric(
-        metricName,
-        metricSymbol,
-        metricUnit,
-        metricValue
-        );
+            Id: metricName,
+            Name: metricName,
+            Symbol: string.IsNullOrWhiteSpace(metricSymbol) ? null : metricSymbol,
+            Unit: string.IsNullOrWhiteSpace(metricUnit) ? null : metricUnit,
+            NumericValue: numericValue,
+            TextValue: textValue,
+            RawValue: rawValue,
+            Remark: null,
+            Link: null,
+            References: new List<Reference>()
+        );  
 
-        metrics.Add(metric);
+            metrics.Add(metric);
     }
 
     var material = new Material(
@@ -93,12 +115,27 @@ foreach (var material in materials)
 
     foreach (var metric in material.Metrics)
     {
-        Console.WriteLine($"Metric: {metric.Name}, Symbol: {metric.Symbol}, Unit: {metric.Unit}, Value: {metric.Value}");
+        Console.WriteLine(
+            $"Metric: {metric.Name}, Numeric: {metric.NumericValue}, Text: {metric.TextValue}, Raw: {metric.RawValue}"
+        );
     }
 }
 
 Console.WriteLine($"Input File: {inputFile}");
 Console.WriteLine($"Output File: {outputFile}");
+
+static bool IsMissingValue(string value)
+{
+    var normalizedValue = value?.Trim().ToLowerInvariant();
+
+    return normalizedValue is
+        "n. a."
+        or "n. a"
+        or "n.a."
+        or "n.a"
+        or "#value!"
+        or "#n/a";
+}
 
 public record Material(
 
