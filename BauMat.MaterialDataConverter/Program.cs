@@ -28,6 +28,14 @@ if (!workbook.Worksheets.TryGetWorksheet("Daten_alle", out var worksheet))
 
 Console.WriteLine("Worksheet 'Daten_alle' found.");
 
+if (!workbook.Worksheets.TryGetWorksheet("ZW_Bet_KD", out var materialWorksheet))
+{
+    Console.Error.WriteLine("Worksheet 'ZW_Bet_KD' not found in the Excel file.");
+    return;
+}
+
+Console.WriteLine($"Worksheet 'ZW_Bet_KD' found: {materialWorksheet.Name}");
+
 var firstMaterialColumn = 4;
 var lastUsedColumn = worksheet.LastColumnUsed();
 
