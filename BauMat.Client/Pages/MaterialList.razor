@@ -191,7 +191,23 @@
     // Catalog list view of a material category (Issue #3).
 
     // Category from the route (/katalog or /katalog/{category}).
-    [Parameter] public string Category { get; set; } = "";
+    [Parameter] public string? Category { get; set; }
+
+    // Blazor reuses this component instance across /katalog/{category} routes and
+    // does not reset parameters that are absent from the new route on its own, so
+    // navigating from /katalog/Holz back to /katalog would otherwise keep the old
+    // Category value. Segment counting (rather than checking for a hardcoded
+    // "katalog" literal) detects the base route regardless of what it's called.
+    protected override void OnParametersSet()
+    {
+        var path = new Uri(Navigation.Uri).AbsolutePath;
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+        if (segments.Length == 1 && !string.IsNullOrEmpty(Category))
+        {
+            Category = null;
+        }
+    }
 
     // ── Return context ────────────────────────────────────────────────────
     //
@@ -228,7 +244,7 @@
         Navigation.NavigateTo(ReturnHref);
     }
 
-    private string PageHeading => string.IsNullOrEmpty(Category) ? "Katalog" : $"Katalog: {Category}";
+    private string PageHeading => string.IsNullOrWhiteSpace(Category) ? "Katalog" : $"Katalog: {Category}";
 
     // ── Filter ─────────────────────────────────────────────────────────────
 
