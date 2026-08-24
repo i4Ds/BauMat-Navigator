@@ -129,6 +129,10 @@ foreach (var material in materials)
     }
 }
 
+var albedoReference = materialWorksheet.Cell(17, 14).GetString().Trim();
+
+Console.WriteLine($"Albedo Reference: {albedoReference}");
+
 Console.WriteLine($"Input File: {inputFile}");
 Console.WriteLine($"Output File: {outputFile}");
 
