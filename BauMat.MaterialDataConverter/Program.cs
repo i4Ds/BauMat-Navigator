@@ -1,11 +1,7 @@
-﻿if (args.Length < 2)
-{
-    Console.WriteLine("Usage: BauMat.MaterialDataConverter <inputFile> <outputFile>");
-    return;
-}
-
-var inputFile = args[0];
-var outputFile = args[1];
+﻿// The converter is meant to be run once against the source spreadsheet; the
+// resulting JSON is then committed to the repo, so no arguments are needed.
+var inputFile = "Data/materials.xlsx";
+var outputFile = "../BauMat.Client/wwwroot/data/materials.json";
 
 if (!File.Exists(inputFile))
 {
