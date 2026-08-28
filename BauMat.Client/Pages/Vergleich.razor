@@ -1,17 +1,114 @@
 @page "/vergleich"
+@implements IDisposable
+@inject CompareState CompareState
+@inject MaterialService MaterialService
 
-<PageTitle>Klimamaterial – Vergleich</PageTitle>
+<PageTitle>Materialvergleich</PageTitle>
 
-<div class="placeholder-page">
-    <div class="placeholder-icon">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-            <rect x="4" y="8" width="16" height="32" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
-            <rect x="28" y="14" width="16" height="26" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
-            <line x1="12" y1="16" x2="12" y2="32" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
-            <line x1="36" y1="22" x2="36" y2="32" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-    </div>
-    <h2 class="placeholder-title">Materialvergleich</h2>
-    <p class="placeholder-text">Wählen Sie Materialien im Katalog aus, um sie hier direkt zu vergleichen.</p>
-    <a href="" class="placeholder-link">Zur Startseite</a>
-</div>
+@if (ComparedMaterials.Count == 0)
+{
+    <ComparisonEmptyState />
+}
+else
+{
+    <section class="comparison-page">
+        <ComparisonHeader Count="@ComparedMaterials.Count" OnClear="CompareState.Clear" />
+
+        <ViewToggle Active="ComparisonView.Table" />
+
+        <div class="comparison-content">
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="comparison-param-head">Parameter</th>
+
+                            @foreach (var material in ComparedMaterials)
+                            {
+                                <th scope="col" class="comparison-col-head">
+                                    <div class="comparison-col-top">
+                                        <span class="comparison-col-name">@material.Name</span>
+                                        <button class="comparison-col-remove"
+                                                title="Aus Vergleich entfernen"
+                                                aria-label="@($"{material.Name} aus Vergleich entfernen")"
+                                                @onclick="() => RemoveFromCompare(material.Id)"
+                                                @onclick:stopPropagation="true">
+                                            ×
+                                        </button>
+                                    </div>
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var (label, value) in Parameters)
+                        {
+                            <tr>
+                                <th scope="row">@label</th>
+
+                                @foreach (var material in ComparedMaterials)
+                                {
+                                    <td class="comparison-value">@value(material)</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="comparison-add-panel">
+                @if (!CompareState.IsFull)
+                {
+                    <a class="comparison-add-btn" href="@AddMaterialHref">
+                        + Material hinzufügen
+                    </a>
+                }
+                else
+                {
+                    <span class="comparison-add-limit" title="Maximal @CompareState.MaxCount Materialien im Vergleich">
+                        Maximum erreicht
+                    </span>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@code {
+    // Side-by-side material comparison (Issue #9). Materials are resolved
+    // from MaterialService.All (not CompareState.Ids directly) so the
+    // column order stays stable and matches the catalog order.
+    private IReadOnlyList<Material> ComparedMaterials =>
+        MaterialService.All
+            .Where(material => CompareState.Contains(material.Id))
+            .ToList();
+
+    private static readonly (string Label, Func<Material, string> Value)[] Parameters =
+    {
+        ("Konstruktionstyp", m => m.ConstructionType),
+        ("PET Tag", m => $"{m.PetTag:0.0} °C"),
+        ("Albedo", m => m.Albedo.ToString("0.00")),
+        ("Lebensdauer", m => $"{m.Lifespan} Jahre"),
+        ("THG", m => $"{m.Ghg:0.#} kg CO₂-eq/m²"),
+    };
+
+    private const string AddMaterialHref = "katalog?returnTo=table";
+
+    protected override void OnInitialized()
+    {
+        CompareState.OnChanged += HandleCompareStateChanged;
+    }
+
+    private void HandleCompareStateChanged()
+    {
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void RemoveFromCompare(int id) => CompareState.Toggle(id);
+
+    public void Dispose()
+    {
+        CompareState.OnChanged -= HandleCompareStateChanged;
+    }
+}

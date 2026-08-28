@@ -1,12 +1,35 @@
-﻿@page "/katalog/{category}"
+@page "/katalog"
+@page "/katalog/{category}"
+@implements IDisposable
+@inject CompareState CompareState
+@inject MaterialService MaterialService
 
-<PageTitle>Katalog – @Category</PageTitle>
+<PageTitle>@PageHeading</PageTitle>
 
 <div class="ml-page">
 
     <header class="ml-header">
-        <h1 class="ml-title">Katalog: @Category</h1>
-        <p class="ml-subtitle">@FilterStatus</p>
+        <div class="ml-header-main">
+            <h1 class="ml-title">@PageHeading</h1>
+            <p class="ml-subtitle">@FilterStatus@(CompareState.Count > 0 ? $" · {CompareState.Count} im Vergleich" : "")</p>
+
+            @if (CompareState.Count > 0 && !IsReturnContext)
+            {
+                <a class="ml-compare-nav" href="vergleich">
+                    Vergleich anzeigen (@CompareState.Count) →
+                </a>
+            }
+        </div>
+
+        @if (IsReturnContext)
+        {
+            <div class="ml-return-action">
+                <a class="ml-return-btn" href="@ReturnHref">← Zurück zum Vergleich</a>
+                <span class="ml-return-hint">
+                    @(IsReferenceSlot ? "Neues Referenzmaterial auswählen" : "Material zum Vergleich hinzufügen")
+                </span>
+            </div>
+        }
     </header>
 
     <div class="ml-layout">
@@ -91,6 +114,7 @@
                         <th class="ml-col-num">Albedo</th>
                         <th class="ml-col-num">Lebensdauer</th>
                         <th class="ml-col-num">THG</th>
+                        <th class="ml-col-action">Aktion</th>
                     </tr>
                     <tr class="ml-units">
                         <th></th>
@@ -99,12 +123,13 @@
                         <th class="ml-col-num">-</th>
                         <th class="ml-col-num">Jahre</th>
                         <th class="ml-col-num">kg CO₂-eq/m²</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var m in FilteredMaterials)
                     {
-                        <tr class="ml-row-link"
+                        <tr class="ml-row-link @(CompareState.Contains(m.Id) ? "ml-row-compared" : "")"
                             tabindex="0"
                             role="link"
                             aria-label="@($"{m.Name} öffnen")"
@@ -116,12 +141,41 @@
                             <td class="ml-cell-num">@m.Albedo.ToString("0.00")</td>
                             <td class="ml-cell-num">@m.Lifespan</td>
                             <td class="ml-cell-num">@m.Ghg.ToString("0")</td>
+                            <td class="ml-cell-action">
+                                @if (IsReferenceSlot)
+                                {
+                                    var isCurrentReference = CompareState.ReferenceId == m.Id;
+                                    var isAtLimit = !CompareState.Contains(m.Id) && CompareState.IsFull;
+                                    <button class="ml-compare-btn @(isCurrentReference ? "compared" : "")"
+                                            type="button"
+                                            disabled="@(isCurrentReference || isAtLimit)"
+                                            title="@(isAtLimit ? $"Maximal {CompareState.MaxCount} Materialien im Vergleich" : null)"
+                                            @onclick="() => SelectReference(m.Id)"
+                                            @onclick:stopPropagation="true"
+                                            @onkeydown:stopPropagation="true">
+                                        @(isCurrentReference ? "✓ Aktuelle Referenz" : "Als Referenz wählen")
+                                    </button>
+                                }
+                                else
+                                {
+                                    var isAtLimit = !CompareState.Contains(m.Id) && CompareState.IsFull;
+                                    <button class="ml-compare-btn @(CompareState.Contains(m.Id) ? "compared" : "")"
+                                            type="button"
+                                            disabled="@isAtLimit"
+                                            title="@(isAtLimit ? $"Maximal {CompareState.MaxCount} Materialien im Vergleich" : null)"
+                                            @onclick="() => CompareState.Toggle(m.Id)"
+                                            @onclick:stopPropagation="true"
+                                            @onkeydown:stopPropagation="true">
+                                        @(CompareState.Contains(m.Id) ? "✓ Im Vergleich" : "+ Vergleichen")
+                                    </button>
+                                }
+                            </td>
                         </tr>
                     }
                     @if (!FilteredMaterials.Any())
                     {
                         <tr>
-                            <td colspan="6" class="ml-empty">
+                            <td colspan="7" class="ml-empty">
                                 Keine Materialien für Filter „@ActiveType".
                             </td>
                         </tr>
@@ -136,30 +190,61 @@
 @code {
     // Catalog list view of a material category (Issue #3).
 
-    // Category from the route (/katalog/{category}).
-    [Parameter] public string Category { get; set; } = "";
+    // Category from the route (/katalog or /katalog/{category}).
+    [Parameter] public string? Category { get; set; }
 
-    // ── Mock data ──────────────────────────────────────────────────────────
-    // Inline data for the prototype. Real data from the PDF catalog is built
-    // out in Issue #11 (JSON + deserialization).
-
-    private record MaterialData(
-        int Id,
-        string Name,
-        string ConstructionType,
-        double PetTag,
-        double Albedo,
-        int Lifespan,
-        double Ghg);
-
-    private readonly List<MaterialData> Materials = new()
+    // Blazor reuses this component instance across /katalog/{category} routes and
+    // does not reset parameters that are absent from the new route on its own, so
+    // navigating from /katalog/Holz back to /katalog would otherwise keep the old
+    // Category value. Segment counting (rather than checking for a hardcoded
+    // "katalog" literal) detects the base route regardless of what it's called.
+    protected override void OnParametersSet()
     {
-        new(1, "Asphalt dunkel",          "Versiegelt",     38.2, 0.08, 25, 45),
-        new(2, "Kiesbelag",               "Unversiegelt",   32.1, 0.30, 30, 12),
-        new(3, "Rasen",                   "Begrünt",        28.5, 0.25, 15,  5),
-        new(4, "Steinplattenpflasterung", "Versiegelt",     35.0, 0.20, 60, 65),
-        new(5, "Betonpflaster, hell",     "Teilversiegelt", 33.5, 0.45, 40, 38),
-    };
+        var path = new Uri(Navigation.Uri).AbsolutePath;
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+        if (segments.Length == 1 && !string.IsNullOrEmpty(Category))
+        {
+            Category = null;
+        }
+    }
+
+    // ── Return context ────────────────────────────────────────────────────
+    //
+    // The comparison views link here with ?returnTo=table|cards (optionally
+    // &slot=reference for a reference-material swap) so the catalog can send
+    // the user straight back to where they came from.
+
+    [SupplyParameterFromQuery(Name = "returnTo")]
+    [Parameter]
+    public string? ReturnTo { get; set; }
+
+    [SupplyParameterFromQuery(Name = "slot")]
+    [Parameter]
+    public string? Slot { get; set; }
+
+    private ComparisonView? ReturnView =>
+        Enum.TryParse<ComparisonView>(ReturnTo, ignoreCase: true, out var view) ? view : null;
+
+    private CompareSlot SelectedSlot =>
+        Enum.TryParse<CompareSlot>(Slot, ignoreCase: true, out var slot) ? slot : CompareSlot.Candidate;
+
+    private bool IsReturnContext => ReturnView is not null;
+
+    private bool IsReferenceSlot => SelectedSlot == CompareSlot.Reference;
+
+    // No returnTo means there's no comparison page to go back to; fall back
+    // to the card view, since the reference concept only exists there.
+    private string ReturnHref =>
+        (ReturnView ?? (IsReferenceSlot ? ComparisonView.Cards : ComparisonView.Table)).Href();
+
+    private void SelectReference(int id)
+    {
+        CompareState.SetReference(id);
+        Navigation.NavigateTo(ReturnHref);
+    }
+
+    private string PageHeading => string.IsNullOrWhiteSpace(Category) ? "Katalog" : $"Katalog: {Category}";
 
     // ── Filter ─────────────────────────────────────────────────────────────
 
@@ -169,22 +254,23 @@
 
     private IEnumerable<string> ConstructionTypes =>
         new[] { All }
-            .Concat(Materials.Select(m => m.ConstructionType).Distinct().OrderBy(s => s));
+            .Concat(MaterialService.All.Select(m => m.ConstructionType).Distinct().OrderBy(s => s));
 
-    private IEnumerable<MaterialData> FilteredMaterials =>
+    private IEnumerable<Material> FilteredMaterials =>
         ActiveType == All
-            ? Materials
-            : Materials.Where(m => m.ConstructionType == ActiveType);
+            ? MaterialService.All
+            : MaterialService.All.Where(m => m.ConstructionType == ActiveType);
 
     private string FilterStatus
     {
         get
         {
-            var total = Materials.Count;
+            var total = MaterialService.All.Count;
             var shown = FilteredMaterials.Count();
+            var totalLabel = total == 1 ? "Material" : "Materialien";
             return ActiveType == All
-                ? $"{total} Materialien"
-                : $"{shown} von {total} Materialien";
+                ? $"{total} {totalLabel}"
+                : $"{shown} von {total} {totalLabel}";
         }
     }
 
@@ -207,12 +293,6 @@
 
     private readonly Dictionary<string, int> weights = new();
 
-    protected override void OnInitialized()
-    {
-        foreach (var p in WeightParameters)
-            weights[p] = 0;
-    }
-
     private void SetWeight(string parameter, object? value)
     {
         if (int.TryParse(value?.ToString(), out var g))
@@ -232,4 +312,26 @@
     [Inject] private NavigationManager Navigation { get; set; } = default!;
 
     private void OpenDetail(int id) => Navigation.NavigateTo($"material/{id}");
+
+    // ── Compare selection ────────────────────────────────────────────────
+    //
+    // Shared across components via the scoped CompareState service (Issue #9).
+
+    protected override void OnInitialized()
+    {
+        foreach (var p in WeightParameters)
+            weights[p] = 0;
+
+        CompareState.OnChanged += HandleCompareStateChanged;
+    }
+
+    private void HandleCompareStateChanged()
+    {
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        CompareState.OnChanged -= HandleCompareStateChanged;
+    }
 }

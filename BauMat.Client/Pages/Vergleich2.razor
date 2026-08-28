@@ -1,0 +1,149 @@
+@page "/vergleich2"
+@implements IDisposable
+@inject CompareState CompareState
+@inject MaterialService MaterialService
+
+<PageTitle>Materialvergleich</PageTitle>
+
+@if (SelectedMaterials.Count == 0)
+{
+    <ComparisonEmptyState />
+}
+else
+{
+    <section class="v2-page">
+        <ComparisonHeader Count="@SelectedMaterials.Count" OnClear="CompareState.Clear" />
+
+        <ViewToggle Active="ComparisonView.Cards" />
+
+        <div class="v2-layout">
+            <div class="v2-reference">
+                <article class="v2-ref-card">
+                    <div class="v2-ref-header">
+                        <div>
+                            <span class="v2-ref-badge">Referenz</span>
+                            <h2 class="v2-card-name">@ReferenceMaterial!.Name</h2>
+                        </div>
+                        <a class="v2-swap-button"
+                           href="katalog?returnTo=cards&slot=reference"
+                           aria-label="@($"Referenzmaterial {ReferenceMaterial.Name} austauschen")">
+                            ⇄ Tauschen
+                        </a>
+                    </div>
+
+                    <dl class="v2-parameter-list">
+                        <div class="v2-parameter-row">
+                            <dt class="v2-parameter-label">Konstruktionstyp</dt>
+                            <dd class="v2-parameter-value">@ReferenceMaterial.ConstructionType</dd>
+                        </div>
+                        <div class="v2-parameter-row">
+                            <dt class="v2-parameter-label">PET Tag</dt>
+                            <dd class="v2-parameter-value">@($"{ReferenceMaterial.PetTag:0.0} °C")</dd>
+                        </div>
+                        <div class="v2-parameter-row">
+                            <dt class="v2-parameter-label">Albedo</dt>
+                            <dd class="v2-parameter-value">@ReferenceMaterial.Albedo.ToString("0.00")</dd>
+                        </div>
+                        <div class="v2-parameter-row">
+                            <dt class="v2-parameter-label">Lebensdauer</dt>
+                            <dd class="v2-parameter-value">@($"{ReferenceMaterial.Lifespan} Jahre")</dd>
+                        </div>
+                        <div class="v2-parameter-row">
+                            <dt class="v2-parameter-label">THG</dt>
+                            <dd class="v2-parameter-value">@($"{ReferenceMaterial.Ghg:0.#} kg CO₂-eq/m²")</dd>
+                        </div>
+                    </dl>
+                </article>
+            </div>
+
+            <div class="v2-compare-section">
+                @if (ComparisonMaterials.Count == 0)
+                {
+                    <p class="v2-hint">
+                        <a href="katalog">Weitere Materialien im Katalog auswählen →</a>
+                    </p>
+                }
+                else
+                {
+                    <div class="v2-compare-grid">
+                        @foreach (var material in ComparisonMaterials)
+                        {
+                            <article class="v2-compare-card">
+                                <div class="v2-card-header">
+                                    <span class="v2-card-name">@material.Name</span>
+                                    <button type="button"
+                                            class="v2-remove-button"
+                                            title="Aus Vergleich entfernen"
+                                            aria-label="@($"{material.Name} aus Vergleich entfernen")"
+                                            @onclick="() => RemoveFromCompare(material.Id)">
+                                        ×
+                                    </button>
+                                </div>
+
+                                <dl class="v2-parameter-list">
+                                    <div class="v2-parameter-row">
+                                        <dt class="v2-parameter-label">Konstruktionstyp</dt>
+                                        <dd class="v2-parameter-value">@material.ConstructionType</dd>
+                                    </div>
+                                    <div class="v2-parameter-row">
+                                        <dt class="v2-parameter-label">PET Tag</dt>
+                                        <dd class="v2-parameter-value">@($"{material.PetTag:0.0} °C")</dd>
+                                    </div>
+                                    <div class="v2-parameter-row">
+                                        <dt class="v2-parameter-label">Albedo</dt>
+                                        <dd class="v2-parameter-value">@material.Albedo.ToString("0.00")</dd>
+                                    </div>
+                                    <div class="v2-parameter-row">
+                                        <dt class="v2-parameter-label">Lebensdauer</dt>
+                                        <dd class="v2-parameter-value">@($"{material.Lifespan} Jahre")</dd>
+                                    </div>
+                                    <div class="v2-parameter-row">
+                                        <dt class="v2-parameter-label">THG</dt>
+                                        <dd class="v2-parameter-value">@($"{material.Ghg:0.#} kg CO₂-eq/m²")</dd>
+                                    </div>
+                                </dl>
+                            </article>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@code {
+    // Insertion order (not Id order) so the reference defaults to "the first
+    // material added" and stays stable as candidates are added or
+    // removed.
+    private IReadOnlyList<Material> SelectedMaterials =>
+        CompareState.Ids
+            .Select(id => MaterialService.All.SingleOrDefault(m => m.Id == id))
+            .Where(material => material is not null)
+            .Select(material => material!)
+            .ToList();
+
+    private Material? ReferenceMaterial =>
+        CompareState.ReferenceId is int id
+            ? MaterialService.All.SingleOrDefault(m => m.Id == id)
+            : null;
+
+    private IReadOnlyList<Material> ComparisonMaterials =>
+        SelectedMaterials.Where(material => material.Id != ReferenceMaterial?.Id).ToList();
+
+    protected override void OnInitialized()
+    {
+        CompareState.OnChanged += HandleCompareStateChanged;
+    }
+
+    private void HandleCompareStateChanged()
+    {
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void RemoveFromCompare(int id) => CompareState.Toggle(id);
+
+    public void Dispose()
+    {
+        CompareState.OnChanged -= HandleCompareStateChanged;
+    }
+}
