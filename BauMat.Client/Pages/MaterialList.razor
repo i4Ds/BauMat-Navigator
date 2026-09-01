@@ -1,11 +1,12 @@
-﻿@page "/katalog/{category}"
+﻿@page "/katalog"
+@page "/katalog/{category}"
 
-<PageTitle>Katalog – @Category</PageTitle>
+<PageTitle>@PageHeading</PageTitle>
 
 <div class="ml-page">
 
     <header class="ml-header">
-        <h1 class="ml-title">Katalog: @Category</h1>
+        <h1 class="ml-title">@PageHeading</h1>
         <p class="ml-subtitle">@FilterStatus</p>
     </header>
 
@@ -136,8 +137,32 @@
 @code {
     // Catalog list view of a material category (Issue #3).
 
-    // Category from the route (/katalog/{category}).
-    [Parameter] public string Category { get; set; } = "";
+    // Category from the route (/katalog or /katalog/{category}).
+    [Parameter] public string? Category { get; set; }
+
+    private static readonly string[] KnownCategories =
+        { "boden", "boeden", "fassade", "fassaden", "dach", "daecher" };
+
+    private string PageHeading => string.IsNullOrEmpty(Category) ? "Katalog" : $"Katalog: {Category}";
+
+    protected override void OnParametersSet()
+    {
+        // The "/katalog" route doesn't include {category}, so Blazor leaves
+        // the parameter at its previous value when navigating back from a
+        // category page to the plain catalog route on the same component.
+        var path = Navigation.ToBaseRelativePath(Navigation.Uri).Split('?', '#')[0].TrimEnd('/');
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (segments.Length == 1)
+        {
+            Category = null;
+        }
+
+        if (!string.IsNullOrEmpty(Category)
+            && !KnownCategories.Contains(Category, StringComparer.OrdinalIgnoreCase))
+        {
+            Navigation.NotFound();
+        }
+    }
 
     // ── Mock data ──────────────────────────────────────────────────────────
     // Inline data for the prototype. Real data from the PDF catalog is built
