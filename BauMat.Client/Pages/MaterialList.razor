@@ -151,7 +151,8 @@
         // the parameter at its previous value when navigating back from a
         // category page to the plain catalog route on the same component.
         var path = Navigation.ToBaseRelativePath(Navigation.Uri).Split('?', '#')[0].TrimEnd('/');
-        if (path.Equals("katalog", StringComparison.OrdinalIgnoreCase))
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (segments.Length == 1)
         {
             Category = null;
         }
