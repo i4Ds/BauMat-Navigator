@@ -141,7 +141,7 @@
     [Parameter] public string? Category { get; set; }
 
     private static readonly string[] KnownCategories =
-        { "fassaden", "boeden", "daecher" };
+        { "boden", "boeden", "fassade", "fassaden", "dach", "daecher" };
 
     private string PageHeading => string.IsNullOrEmpty(Category) ? "Katalog" : $"Katalog: {Category}";
 
