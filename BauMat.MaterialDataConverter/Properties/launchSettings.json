@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BauMat.MaterialDataConverter": {
+      "commandName": "Project",
+      "workingDirectory": "."
+    }
+  }
+}
